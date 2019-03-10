@@ -1,0 +1,665 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+::selection {
+  color: white; 
+  background: #78AF27;
+ }
+
+a{
+	text-decoration: none;
+} 
+.nametag h1{
+	position: absolute;
+	max-width: 585px;
+	max-height: 111px;
+	left: 64vw;
+	top: 506px;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 245;
+	line-height: normal;
+	font-size: 74px;
+	color: #000000;
+	letter-spacing: 0.01em;
+}
+.nametag p{
+	position: absolute;
+	width: 680px;
+	height: 212px;
+	left: 1066px;
+	top: 616px;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 20px;
+	text-align: right;
+	color: rgba(38, 35, 37, 0.71);
+}
+
+.box1{
+	position: absolute;
+	left:10vw;
+	top:3.2vw;
+	/*max-width:80vw;
+	max-width: 321px;*/  
+}
+
+.box2{
+	position: absolute;
+	left: 40vw;
+	top: 3.2vw; 
+}
+.box3{
+	position: absolute;
+	left: 69vw;
+	top: 3.2vw; 
+}
+.box{
+	max-width: 22vw;
+	max-height: 321px;
+
+}
+.box img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+	border-radius: 40px;
+}
+.box img:hover{
+	box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.5);
+	transition-duration: 0.2s;
+    cursor:pointer;	
+}
+.label{
+	width: 260px;
+	height: 57px;
+	background: #FFFFFF;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.1);
+	border-radius: 40px;
+}
+.label h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	font-size: 14px;
+	letter-spacing: 0.6em;
+	color: #000000;
+	text-align: center;
+	margin-top: 19px;
+}
+.b1{
+	position: absolute;
+	left: 15vw;
+	top: 21.4vw; 
+}
+.b1 h1:hover {
+	/*color: linear-gradient(270deg, #F1B374  20%, #F16862 100%);*/
+	background: -webkit-linear-gradient(-180deg, #F1B374  20%, #F16862 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+    transition-duration: 0.2s;
+    cursor:pointer;
+}
+.b2{
+	position: absolute;
+	left: 48vw;
+	top: 21.4vw;
+	width: 114px; 
+}
+.b2 h1:hover {
+	background: -webkit-linear-gradient(270deg, #00AE4C 11.92%, #85C43F 85.38%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+    transition-duration: 0.2s;
+    cursor:pointer;
+}
+.b3{
+	position: absolute;
+	left: 75vw;
+	top: 21.4vw; 
+	width: 206px;
+}
+.b3 h1:hover {
+	background: -webkit-linear-gradient(270deg, #00AE4C 11.92%, #85C43F 85.38%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+    transition-duration: 0.2s;
+    cursor:pointer;
+}
+
+.socialicons i{
+	padding: 10px;
+	font-size: 32px;
+	background: #FFFFFF;
+	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+	border-radius: 100px;
+	position: absolute;
+	top: 44vw;
+	max-width: 60px;
+	max-height: 60px;
+}
+.fa-instagram{
+	left: 64vw;
+	padding: 12px;
+}
+.fa-behance{
+	left:68vw;
+	padding: 18px; 
+
+}
+.fa-youtube-play{
+	left: 72vw;
+
+}
+.fa-dribbble{
+	left: 76vw;
+}
+.contact h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	font-size: 14px;
+	letter-spacing: 0.6em;
+	color: #FFFFFF;
+	margin-top: 19px;
+	text-align: center;
+}
+.contact{
+	position: absolute;
+	width: 160px;
+	height: 60px;
+	left: 80vw;
+	top: 44vw;
+	background: linear-gradient(270deg, #00AE4C 11.92%, #85C43F 85.38%);
+	box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.25);
+	border-radius: 30px;
+}
+.contact:hover{
+	box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.35);
+	transition-duration: 0.2s;
+    cursor:pointer;	
+}
+.myicon{
+	position: fixed;
+	max-width: 4vw;
+	max-height: 4vw;	
+	left: 4vw;
+	top: 54px;
+}
+.myicon img{
+	width: 100%;
+	height: 100%;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+	border-radius: 100px;
+	object-fit: cover;
+	overflow: hidden;
+}
+.topname{
+	position: absolute;
+	top: 78px;
+	left: 10vw;
+}
+.topname h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 24px;
+	letter-spacing: 0.4em;
+	color: #000000;
+}
+.pagetag{
+	position: absolute;
+
+	height: 50px;
+
+	right: 5vw;
+	top: 73px;
+	/*border:2px solid black;*/
+}
+.pagetag h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 300;
+	line-height: normal;
+	font-size: 48px;
+	letter-spacing: 0.2em;
+	color: rgba(0, 0, 0, 0.59);
+	text-align: right;
+}
+
+.sidebar{
+	width: 4vw;
+	height: 640px;
+	position: fixed;
+	left: 4vw;
+	top: 240px;
+}	
+
+.side{
+	background: #FFFFFF;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.1);
+	border-radius: 40px;
+	transform: rotate(-90deg);
+	max-height: 100%;
+	overflow: auto;
+}
+.side h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	font-size: 14px;
+	letter-spacing: 0.6em;
+	color: #000000;
+	text-align: center;
+	padding-top: 18px;
+
+}
+.barbox1{
+position: fixed;
+width: 255px;
+height: 54px;
+left: -12px;
+top: 315px;
+}
+
+.barbox2{
+position: fixed;
+width: 110px;
+height: 54px;
+left: 60px;
+top: 520px;	
+}
+.barbox3{
+position: fixed;
+width: 199px;
+height: 54px;
+left: 16px;
+top: 700px;
+}
+.illobox{
+	max-width: 20vw;
+	max-height: 299px;
+}
+.illobox img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	border-radius: 40px;
+}
+.imgtext{
+	position: absolute;
+	max-width: 19vw;
+	max-height: 288px;
+	left: 0;
+	top: 0;
+	/*border: 2px solid black;*/
+	padding-top: 3vw;
+	padding-left: 1vw;
+	padding-right: 1vw;
+
+	opacity: 0;	
+}
+.imgtext h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	font-size: 20px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;
+}
+.imgtext p{
+	padding-top: 1vw;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 14px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;	
+}
+.imgtext h2{
+	padding-top: 1.5vw;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	font-size: 18px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;	
+	padding-left: 70%
+
+}
+.ibox1shadow{
+	position: absolute;
+	min-width: 20vw;
+	min-height: 288px;
+	left: 0;
+	top: 0;
+	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.20);
+	border-radius: 40px;
+}
+.ibox1shadow:hover{
+	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.10), inset 300px 300px 10px rgba(255, 255, 255, 0.75);
+}
+.illobox:hover .imgtext{
+	opacity: 1;
+	transition-duration: 0.2s;
+}
+
+/* ILLUSTRATION BOXES*/
+		.ibox1{
+			position: absolute;
+			left:16vw;
+			top:10.6vw;	
+		}
+		.ibox2{
+			position: absolute;
+			left:40vw;
+			top:10.6vw;		
+		}
+		.ibox3{
+			position: absolute;
+			left:64vw;
+			top:10.6vw;		
+		}	
+		.ibox4{
+			position: absolute;
+			left: 16vw;
+			top: 29.6vw;
+		}
+		.ibox5{
+			position: absolute;
+			left: 40vw;
+			top: 29.6vw;
+		}
+		.ibox6{
+			position: absolute;
+			left: 64vw;
+			top: 29.6vw;
+		}
+		.ibox7{
+			position: absolute;
+			left: 16vw;
+			top: 48.6vw;
+
+		}
+		.ibox8{
+			position: absolute;
+			left: 40vw;
+			top: 48.6vw;
+
+		}
+		.ibox9{
+			position: absolute;
+			left: 64vw;
+			top: 48.6vw;
+
+		}
+.iextraspace{
+	/*border: 2px solid black;*/
+	height: 2vw;
+	width: 10vw;
+			position: absolute;
+			top: 64vw;
+}		
+
+/* SOLO PAGES*/		
+.fsolo{
+	position: absolute;
+	left: 16vw;
+	top:9.6vw;
+	/*border: 2px solid black;	*/
+
+}
+.fsolo h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 38px;
+	color: rgba(0, 0, 0, 0.59);
+}
+.fsolo img{
+	padding-top: 1vw;
+	padding-bottom: 1.4vw;
+	width: 70vw;
+}
+.ftext{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 20px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;
+	padding-top: 0.8vw;
+	width: 70vw;
+
+}
+.fnextbutton{
+	width: 7vw;
+	margin-left: 53.2vw;
+	background: #FFFFFF;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.1);
+	border-radius: 40px;
+
+	text-align: center;
+	padding-top: 0.70vw;
+	padding-bottom: 0.70vw;
+	padding-left: 0.65vw;
+	padding-right: 0.65vw;
+
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 300;
+	line-height: normal;
+	font-size: 20px;
+	letter-spacing: 0.4em;
+	color: #000000;
+}
+.fbackbutton{
+	width: 7vw;
+
+	margin-top: 2.5vw;
+	margin-bottom: 1.4vw;
+
+
+	background: #FFFFFF;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.1);
+	border-radius: 40px;
+
+	text-align: center;
+	padding-top: 0.70vw;
+	padding-bottom: 0.70vw;
+	padding-left: 0.65vw;
+	padding-right: 0.65vw;
+
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 300;
+	line-height: normal;
+	font-size: 20px;
+	letter-spacing: 0.4em;
+	color: #000000;
+}
+.ffnextbutton{
+	width: 7vw;
+	margin-left: 61.7vw;
+	margin-top: 2.5vw;
+	margin-bottom: 1.4vw;
+	background: #FFFFFF;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.1);
+	border-radius: 40px;
+
+	text-align: center;
+	padding-top: 0.70vw;
+	padding-bottom: 0.70vw;
+	padding-left: 0.65vw;
+	padding-right: 0.65vw;
+
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 300;
+	line-height: normal;
+	font-size: 20px;
+	letter-spacing: 0.4em;
+	color: #000000;
+}
+.buttons{
+	/*border:2px solid black;*/
+	display: inline-block;
+}
+.gifbox{
+	max-width: 20vw;
+	max-height: 299px;
+}
+.gifbox img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	border-radius: 40px;
+}
+/* GIF BOXES*/
+		.gbox1{
+			position: absolute;
+			left:16vw;
+			top:16.6vw;	
+		}
+		.gbox2{
+			position: absolute;
+			left:40vw;
+			top:16.6vw;		
+		}
+		.gbox3{
+			position: absolute;
+			left:64vw;
+			top:16.6vw;		
+		}
+.gifbox:hover .imgtext{
+	opacity: 1;
+	transition-duration: 0.2s;
+}
+/*PROJECT PAGE*/
+.pt1{
+
+	max-width: 40vw;
+	min-height: 216px;
+	/*border: 2px solid black;*/
+	padding-top: 1vw;
+	padding-left: 1vw;
+	padding-right: 1vw;
+	margin-left: 36.3vw;
+	margin-top: 11vw;
+
+
+	opacity: 1;	
+}
+.projtext h1{
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	font-size: 20px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;
+}
+.projtext p{
+	padding-top: 1vw;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 14px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;	
+}
+.projtext h2{
+	padding-top: 1.9vw;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	font-size: 18px;
+	letter-spacing: 0.06em;
+	color: #1F1F1F;	
+	padding-left: 79%
+}
+.projcontent{
+	display: inline;
+}
+.projbox{
+	max-width: 20vw;
+	max-height: 299px;
+}
+.projbox img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	border-radius: 40px;
+}
+.pbox1shadow{
+	position: absolute;
+	min-width: 20vw;
+	min-height: 288px;
+	left: 0;
+	top: 0;
+	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.20);
+	border-radius: 40px;
+}
+		.pbox1{
+			position: absolute;
+			left:16vw;
+			top:10.6vw;	
+		}
+		.pbox2{
+			position: absolute;
+			left: 16vw;
+			top: 29.6vw;
+		}
+		.pbox3{
+			position: absolute;
+			left: 16vw;
+			top: 48.6vw;
+		}
+
+.pt2{
+
+	max-width: 40vw;
+	min-height: 216px;
+	/*border: 2px solid black;*/
+	padding-top: 1vw;
+	padding-left: 1vw;
+	padding-right: 1vw;
+	margin-left: 36.3vw;
+	margin-top: 7.2vw;
+
+
+	opacity: 1;	
+}
+.pt3{
+
+	max-width: 40vw;
+	min-height: 216px;
+	/*border: 2px solid black;*/
+	padding-top: 1vw;
+	padding-left: 1vw;
+	padding-right: 1vw;
+	margin-left: 36.3vw;
+	margin-top: 7.2vw;
+
+
+	opacity: 1;	
+}
