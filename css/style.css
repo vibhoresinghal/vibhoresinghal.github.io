@@ -688,13 +688,13 @@ top: 700px;
 }
 @media only screen and (max-width: 650px){
 /*mobile index*/
-
+/*mobile index*//*mobile index*//*mobile index*//*mobile index*//*mobile index*//*mobile index*//*mobile index*/
 	.nametag h1{
 	text-transform: uppercase;
 	position: absolute;
 	width: 606px;
 	height: 50px;
-	left: 100px;
+	left: 125px;
 	top: 38px;
 	position: absolute;
 	font-family: Nunito;
@@ -707,10 +707,10 @@ top: 700px;
 }
 .nametag p{
 	position: absolute;
-	min-width: 299px;
+	min-width: 352px;
 	height: 128px;
-	left: 27px;
-	top: 876px;
+	left: 40px;
+	top: 948px;
 
 	font-family: Nunito;
 	font-style: normal;
@@ -740,7 +740,7 @@ top: 700px;
 }
 .box1{
 	position: absolute;
-	left:5.30vw;
+	left:8.7vw;
 	top:99px;
 	/*max-width:80vw;
 	max-width: 321px;*/  
@@ -748,13 +748,13 @@ top: 700px;
 
 .box2{
 	position:relative;
-	left: 5.30vw;
-	top: 353px; 
+	left: 8.7vw;
+	top: 380px; 
 }
 .box3{
 	position: absolute;
-	left: 5.30vw;
-	top: 607px; 
+	left: 8.7vw;
+	top: 661px; 
 }
 .box{
 	max-width: 88.33%;
@@ -793,22 +793,22 @@ top: 700px;
 	position: absolute;
 	width: 165px;
 	height: 31px;
-	left: -37px;
-	top: 200px;
+	left: -22px;
+	top: 220px;
 }
 .b2{
 	position: absolute;
 	width: 78px;
 	height: 31px;
-	left: 6.3px;
-	top: 457px; 
+	left: 23.3px;
+	top: 497px; 
 }
 .b3{
 	position: absolute;
 	width: 128px;
 	height: 31px;
-	left: -18px;
-	top: 712px;
+	left: -3px;
+	top: 777px;
 }
 
 .socialicons i{
@@ -818,11 +818,12 @@ top: 700px;
 	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
 	border-radius: 100px;
 	position: absolute;
-	top: 1200px;
+	top: 1205px;
 	max-width: 60px;
 	max-height: 60px;
 	color: black;
 	margin-bottom: 32px;
+	margin-left: 37px;
 }
 .fa-instagram{
 	left: 27px;
@@ -847,8 +848,8 @@ display: none;
 position: absolute;
 width: 50px;
 height: 50px;
-left: 283px;
-top: 1200px;
+left: 320px;
+top: 1205px;
 
 background: linear-gradient(90deg, #85C43F -9.52%, #00AE4C 105.95%);
 box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.18);
