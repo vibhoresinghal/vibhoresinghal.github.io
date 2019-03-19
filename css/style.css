@@ -692,7 +692,7 @@ top: 700px;
 	.nametag h1{
 	text-transform: uppercase;
 	position: absolute;
-	width: 606px;
+	width: 65%;
 	height: 50px;
 	left: 125px;
 	top: 38px;
@@ -704,6 +704,7 @@ top: 700px;
 	line-height: normal;
 	letter-spacing: 0.4em;
 	color: #000000;
+	border: 2px solid black;
 }
 .nametag p{
 	position: absolute;
