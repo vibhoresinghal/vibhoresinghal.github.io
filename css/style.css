@@ -1146,6 +1146,35 @@ display: none;
 	display: inline;
 
 }
+.gifbox{
+	min-width: 370px;
+	min-height: 299px;
+}
+.gifbox img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	border-radius: 40px;
+}
+/* GIF BOXES*/
+		.gbox1{
+			position: absolute;
+			left:20px;
+			top:99px;
+
+	
+		}
+		.gbox2{
+			position: absolute;
+			left:20px;
+			top:388px;	
+		}
+		.gbox3{
+			position: absolute;
+			left:20px;
+			top:677px;	
+		}
 }
 @media only screen and (max-width: 360px){
 /*mobile index*/
@@ -1165,7 +1194,6 @@ display: none;
 	line-height: normal;
 	letter-spacing: 0.4em;
 	color: #000000;
-	border: 2px solid black;
 }
 .nametag p{
 	position: absolute;
