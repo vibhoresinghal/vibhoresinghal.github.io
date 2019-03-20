@@ -936,7 +936,7 @@ top: 700px;
 }
 */
 .illobox{
-	min-width: 93.61%;
+	min-width: 370px;
 	min-height: 299px;
 }
 .illobox img{
@@ -1004,49 +1004,49 @@ display: none;
 /* ILLUSTRATION BOXES*/
 		.ibox1{
 			position: absolute;
-			left:12px;
+			left:20px;
 			top:99px;	
 		}
 		.ibox2{
 			position: absolute;
-			left:12px;
+			left:20px;
 			top:388px;		
 		}
 		.ibox3{
 			position: absolute;
-			left:12px;
+			left:20px;
 			top:677px;		
 		}	
 		.ibox4{
 			position: absolute;
-			left: 12px;
+			left: 20px;
 			top: 966px;
 		}
 		.ibox5{
 			position: absolute;
-			left: 12px;
+			left: 20px;
 			top: 1255px;
 		}
 		.ibox6{
 			position: absolute;
-			left: 12px;
+			left: 20px;
 			top: 1544px;
 		}
 		.ibox7{
 			position: absolute;
-			left: 12px;
+			left: 20px;
 			top: 1833px;
 
 		}
 		.ibox8{
 			position: absolute;
-			left: 12px;
+			left: 20px;
 			top: 2122px;
 
 		}
 		.ibox9{
 			position: relative;
-			left: 12px;
+			left: 20px;
 			top: 2411px;
 
 		}
@@ -1153,7 +1153,7 @@ display: none;
 	.nametag h1{
 	text-transform: uppercase;
 	position: absolute;
-	width: 606px;
+	width: 69%;
 	height: 50px;
 	left: 100px;
 	top: 38px;
@@ -1165,6 +1165,7 @@ display: none;
 	line-height: normal;
 	letter-spacing: 0.4em;
 	color: #000000;
+	border: 2px solid black;
 }
 .nametag p{
 	position: absolute;
