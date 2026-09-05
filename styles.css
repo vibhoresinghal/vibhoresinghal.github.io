@@ -399,7 +399,8 @@ main {
   vertical-align: middle;
 }
 
-.job-logo-olx {
+.job-logo-olx,
+.job-logo-light {
   background: #fff;
   box-shadow: inset 0 0 0 1px var(--line);
 }
@@ -438,9 +439,19 @@ main {
 }
 
 .entry-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 15px;
   font-weight: 500;
   letter-spacing: -0.015em;
+}
+
+.entry-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .entry-panel {
