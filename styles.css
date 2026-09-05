@@ -289,7 +289,7 @@ main {
   width: min(var(--content), 100%);
   min-width: 0;
   margin: 0 auto;
-  padding: 36px 0 64px;
+  padding: 52px 0 64px;
 }
 
 .hero,
@@ -300,6 +300,15 @@ main {
 
 .hero {
   padding-bottom: 0;
+}
+
+.hero-sticker {
+  display: block;
+  width: 108px;
+  height: auto;
+  margin: 0 0 18px;
+  user-select: none;
+  pointer-events: none;
 }
 
 .signature {
@@ -1096,7 +1105,7 @@ a.entry-title {
     width: 100%;
     max-width: var(--content);
     margin: 0;
-    padding: 12px 0 64px;
+    padding: 24px 0 64px;
   }
 }
 
