@@ -6,10 +6,14 @@
   --link-line: #c4c4be;
   --line: rgba(22, 22, 22, 0.12);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-hover: cubic-bezier(0.22, 1, 0.36, 1);
   --page-padding: clamp(20px, 4vw, 48px);
   --content: 586px;
+  --entry-label: 88px;
+  --entry-gap: 12px;
   --section-gap: 48px;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "Momo Trust Display", "Inter", sans-serif;
 }
 
 * {
@@ -110,6 +114,19 @@ a {
   text-decoration: none;
 }
 
+a[href],
+a[href]:link,
+a[href]:visited,
+a[href]:hover,
+a[href]:focus,
+a[href]:active,
+a:-webkit-any-link,
+a[href] * {
+  cursor: pointer !important;
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
+}
+
 p,
 h1,
 h2,
@@ -151,6 +168,7 @@ h3 {
   height: 100vh;
   padding: 36px 0 32px;
   background: var(--paper);
+  pointer-events: none;
 }
 
 .index-rail > p,
@@ -177,6 +195,7 @@ h3 {
   color: var(--muted);
   font-size: 13px;
   transition: color 200ms ease;
+  pointer-events: auto;
 }
 
 .index-rail a span {
@@ -210,20 +229,6 @@ h3 {
   opacity: 1;
 }
 
-.index-links {
-  margin: 16px 0 0;
-  font-size: 13px;
-}
-
-.index-links a {
-  color: var(--link-ink);
-  border-bottom: 0;
-  text-decoration-line: underline;
-  text-decoration-color: var(--link-line);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.18em;
-}
-
 .ext {
   font-size: 11px;
 }
@@ -246,10 +251,12 @@ main {
 }
 
 .signature {
-  margin-bottom: 4px;
-  font-size: 16px;
-  font-weight: 620;
-  letter-spacing: -0.025em;
+  margin-bottom: 6px;
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
 .hero h1 {
@@ -274,6 +281,8 @@ main {
 }
 
 .hero-copy a:not(.brand) {
+  display: inline-block;
+  padding-bottom: 0.2em;
   color: var(--link-ink);
   border-bottom: 0;
   text-decoration-line: underline;
@@ -283,23 +292,28 @@ main {
 }
 
 .brand {
-  display: inline;
+  display: inline-flex;
+  align-items: baseline;
   color: var(--link-ink);
   white-space: nowrap;
   border-bottom: 0;
+  vertical-align: baseline;
 }
 
 .brand img {
-  display: inline-block;
+  display: block;
   width: 1em;
   height: 1em;
   margin-inline-end: 0.3em;
   object-fit: cover;
   border-radius: 0.2em;
-  vertical-align: -0.12em;
+  position: relative;
+  top: 0.12em;
 }
 
 .brand > span {
+  display: inline-block;
+  padding-bottom: 0.2em;
   text-decoration-line: underline;
   text-decoration-color: var(--link-line);
   text-decoration-thickness: 2px;
@@ -311,7 +325,8 @@ main {
 .button:hover,
 .contact-email:hover,
 .text-button:hover,
-.site-footer a:hover {
+.site-footer a:hover,
+.entry-title:hover .entry-name {
   color: var(--ink);
   text-decoration-color: var(--ink);
 }
@@ -319,7 +334,7 @@ main {
 .button {
   display: inline-flex;
   margin-top: 12px;
-  padding: 0;
+  padding: 0 0 0.2em;
   color: var(--link-ink);
   background: none;
   border: 0;
@@ -341,7 +356,8 @@ main {
 
 .section-heading h2,
 .work-history h2,
-.contact h2 {
+.contact h2,
+.section#tools h2 {
   margin: 0;
   color: var(--muted);
   font-size: 15px;
@@ -351,8 +367,55 @@ main {
 }
 
 .work-history h2,
-.contact h2 {
+.contact h2,
+.section#tools h2 {
   margin-bottom: 12px;
+}
+
+.tool-marquee {
+  overflow: hidden;
+  margin-top: 4px;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+}
+
+.tool-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: tool-marquee 96s linear infinite;
+}
+
+.tool-marquee:hover .tool-marquee-track {
+  animation-play-state: paused;
+}
+
+.tool-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0 6px 0 0;
+  list-style: none;
+}
+
+.tool-row li {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.tool-row img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 9px;
+}
+
+@keyframes tool-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 .section-heading p {
@@ -396,7 +459,7 @@ main {
   height: 24px;
   margin-inline-end: 0;
   border-radius: 4px;
-  vertical-align: middle;
+  top: 0;
 }
 
 .job-logo-olx,
@@ -417,6 +480,11 @@ main {
   top: 0.1rem;
 }
 
+.entry-list,
+.job-list {
+  position: relative;
+}
+
 .entry-list {
   border-top: 0;
 }
@@ -428,9 +496,10 @@ main {
 
 .entry-head {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 12px;
-  align-items: baseline;
+  grid-template-columns: var(--entry-label) minmax(0, 1fr);
+  gap: var(--entry-gap);
+  align-items: center;
+  min-height: 28px;
   padding: 3px 0;
 }
 
@@ -447,26 +516,40 @@ main {
   letter-spacing: -0.015em;
 }
 
+a.entry-title {
+  width: max-content;
+  max-width: 100%;
+}
+
 .entry-logo {
   width: 24px;
   height: 24px;
   object-fit: cover;
   border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.entry-name {
+  display: inline-block;
+  padding-bottom: 0.2em;
+  text-decoration-line: underline;
+  text-decoration-color: var(--link-line);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
 }
 
 .entry-panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 680ms var(--ease-out) 80ms;
+  pointer-events: none;
 }
 
 .entry-body,
 .job-detail {
   overflow: hidden;
   min-height: 0;
-  padding: 0 0 8px 84px;
+  padding: 0 0 10px calc(var(--entry-label) + var(--entry-gap));
   opacity: 0;
-  transition: opacity 280ms ease;
 }
 
 .work-history .entry-body {
@@ -491,6 +574,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 10px;
 }
 
 .entry-gallery a,
@@ -511,25 +595,23 @@ main {
 }
 
 @media (hover: hover) {
-  .entry:hover .entry-panel,
-  .entry:focus-within .entry-panel,
+  .entry.is-hot .entry-panel,
+  .entry:focus-visible .entry-panel,
+  .entry:has(:focus-visible) .entry-panel,
   .entry.is-open .entry-panel,
-  .job:hover .entry-panel,
-  .job:focus-within .entry-panel,
+  .job.is-hot .entry-panel,
+  .job:has(:focus-visible) .entry-panel,
   .job.is-open .entry-panel {
     grid-template-rows: 1fr;
-    transition-delay: 0ms;
   }
 
-  .entry:hover .entry-body,
-  .entry:focus-within .entry-body,
+  .entry:focus-visible .entry-body,
+  .entry:has(:focus-visible) .entry-body,
   .entry.is-open .entry-body,
-  .job:hover .entry-body,
-  .job:focus-within .entry-body,
+  .job:has(:focus-visible) .entry-body,
   .job.is-open .entry-body {
     opacity: 1;
-    transition-duration: 480ms;
-    transition-delay: 70ms;
+    filter: none;
   }
 }
 
@@ -537,7 +619,6 @@ main {
   .entry.is-open .entry-panel,
   .job.is-open .entry-panel {
     grid-template-rows: 1fr;
-    transition-delay: 0ms;
   }
 
   .entry.is-open .entry-body,
@@ -613,8 +694,10 @@ main {
 .contact-email,
 .text-button,
 .site-footer a {
+  display: inline-block;
   color: var(--link-ink);
   border-bottom: 0;
+  padding-bottom: 0.2em;
   text-decoration-line: underline;
   text-decoration-color: var(--link-line);
   text-decoration-thickness: 2px;
@@ -622,7 +705,7 @@ main {
 }
 
 .text-button {
-  padding: 0;
+  padding: 0 0 0.2em;
   color: var(--link-ink);
   background: none;
   border: 0;
@@ -681,26 +764,26 @@ main {
   border-bottom: 1px solid currentColor;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
+  .page-shell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .index-rail {
     position: relative;
     left: auto;
-    width: auto;
+    width: 100%;
+    max-width: var(--content);
     height: auto;
-    padding: 24px 0 8px;
+    padding: 24px 0 4px;
   }
-
-  main {
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 720px) {
 
   .index-rail ol {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 14px;
+    gap: 8px 16px;
     margin-top: 10px;
   }
 
@@ -709,7 +792,24 @@ main {
   }
 
   main {
+    width: 100%;
+    max-width: var(--content);
+    margin: 0;
+    padding: 12px 0 64px;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --entry-label: 80px;
+  }
+
+  .index-rail,
+  main {
     max-width: none;
+  }
+
+  main {
     padding: 20px 0 56px;
   }
 
@@ -720,12 +820,24 @@ main {
   }
 
   .entry-head {
-    grid-template-columns: 64px 1fr;
+    grid-template-columns: var(--entry-label) minmax(0, 1fr);
   }
 
   .entry-body,
   .job-detail,
   .work-history .entry-body {
     padding-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry.is-hot .entry-body,
+  .job.is-hot .entry-body {
+    opacity: 1;
+    filter: none;
+  }
+
+  .tool-marquee-track {
+    animation: none;
   }
 }

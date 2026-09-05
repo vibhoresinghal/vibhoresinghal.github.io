@@ -24,8 +24,10 @@
   <link rel="canonical" href="https://vibhoresinghal.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Momo+Trust+Display&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23151916'/%3E%3Cpath d='M23 27h16l11 30 11-30h16L57 76H43L23 27Z' fill='%23ece9e1'/%3E%3C/svg%3E">
 </head>
 <body>
@@ -57,44 +59,48 @@
           </a>
         </li>
         <li>
-          <a href="#side-projects">
+          <a href="#tools">
             <span>04</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.2" y="2.2" width="5" height="5" rx="1"/><rect x="8.8" y="2.2" width="5" height="5" rx="1"/><rect x="2.2" y="8.8" width="5" height="5" rx="1"/><rect x="8.8" y="8.8" width="5" height="5" rx="1"/></svg>
+            Tools
+          </a>
+        </li>
+        <li>
+          <a href="#side-projects">
+            <span>05</span>
             <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.4 13.2 5.4v5.2L8 13.6 2.8 10.6V5.4Z"/><path d="M8 2.4v11.2M2.8 5.4 8 8.4l5.2-3"/></svg>
             Side projects
           </a>
         </li>
         <li>
           <a href="#hobbies">
-            <span>05</span>
+            <span>06</span>
             <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 5.6h2.1l1-1.5h3.8l1 1.5H13A1.2 1.2 0 0 1 14.2 6.8v5A1.2 1.2 0 0 1 13 13H3A1.2 1.2 0 0 1 1.8 11.8v-5A1.2 1.2 0 0 1 3 5.6Z"/><circle cx="8" cy="9.1" r="2.1"/></svg>
             Hobbies
           </a>
         </li>
         <li>
           <a href="#workspaces">
-            <span>06</span>
+            <span>07</span>
             <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="8.2" rx="1.2"/><path d="M6.2 13h3.6M8 11.2V13"/></svg>
             Workspaces
           </a>
         </li>
         <li>
           <a href="#bts">
-            <span>07</span>
+            <span>08</span>
             <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.4h10v8.2H3Z"/><path d="M3 4.4 5.2 2.4h2.1L5.2 4.4M8.7 2.4H10.8L8.7 4.4"/><path d="M5.4 4.4v8.2M10.6 4.4v8.2"/></svg>
             BTS
           </a>
         </li>
         <li>
           <a href="#contact">
-            <span>08</span>
+            <span>09</span>
             <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.2" y="3.6" width="11.6" height="8.8" rx="1.2"/><path d="m2.6 4.6 5.4 4 5.4-4"/></svg>
             Contact
           </a>
         </li>
       </ol>
-      <p class="index-links">
-        <a href="https://www.linkedin.com/in/vibhoresinghal" target="_blank" rel="noopener noreferrer">LinkedIn <span class="ext" aria-hidden="true">↗</span></a>
-      </p>
     </aside>
 
     <main id="main">
@@ -239,24 +245,68 @@
         </div>
       </section>
 
+      <section class="section" id="tools">
+        <h2>Tools</h2>
+        <div class="tool-marquee" aria-label="Tools I use">
+          <div class="tool-marquee-track">
+            <ul class="tool-row">
+              <li><img src="images/logos/tools/adobeillustrator.svg" alt="Adobe Illustrator" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobephotoshop.svg" alt="Adobe Photoshop" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobeindesign.svg" alt="Adobe InDesign" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobepremierepro.svg" alt="Adobe Premiere Pro" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobeaftereffects.svg" alt="Adobe After Effects" width="40" height="40"></li>
+              <li><img src="images/logos/tools/figma.svg" alt="Figma" width="40" height="40"></li>
+              <li><img src="images/logos/tools/rive.svg" alt="Rive" width="40" height="40"></li>
+              <li><img src="images/logos/tools/davinciresolve.png" alt="DaVinci Resolve" width="40" height="40"></li>
+              <li><img src="images/logos/tools/cursor.png" alt="Cursor" width="40" height="40"></li>
+              <li><img src="images/logos/tools/chatgpt.png" alt="ChatGPT" width="40" height="40"></li>
+              <li><img src="images/logos/tools/codex.png" alt="Codex" width="40" height="40"></li>
+              <li><img src="images/logos/tools/claude.png" alt="Claude" width="40" height="40"></li>
+              <li><img src="images/logos/tools/antigravity.png" alt="Google Antigravity" width="40" height="40"></li>
+              <li><img src="images/logos/tools/notion.png" alt="Notion" width="40" height="40"></li>
+              <li><img src="images/logos/tools/affine.png" alt="AFFiNE" width="40" height="40"></li>
+              <li><img src="images/logos/tools/tldraw.png" alt="tldraw" width="40" height="40"></li>
+            </ul>
+            <ul class="tool-row" aria-hidden="true">
+              <li><img src="images/logos/tools/adobeillustrator.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobephotoshop.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobeindesign.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobepremierepro.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/adobeaftereffects.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/figma.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/rive.svg" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/davinciresolve.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/cursor.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/chatgpt.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/codex.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/claude.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/antigravity.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/notion.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/affine.png" alt="" width="40" height="40"></li>
+              <li><img src="images/logos/tools/tldraw.png" alt="" width="40" height="40"></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="side-projects">
         <header class="section-heading">
           <h2>Side projects</h2>
           <p>Things I made because I wanted them to exist.</p>
         </header>
         <div class="entry-list">
-          <a class="entry" href="https://vibhoresinghal.com/reelsfolio/" target="_blank" rel="noopener noreferrer">
-            <div class="entry-head"><span class="entry-meta">Project</span><span class="entry-title"><img class="entry-logo" src="images/logos/reelsfolio.png" alt="">ReelsFolio</span></div>
+          <article class="entry">
+            <div class="entry-head"><span class="entry-meta">Project</span><a class="entry-title" href="https://vibhoresinghal.com/reelsfolio/" target="_blank" rel="noopener noreferrer"><img class="entry-logo" src="images/logos/reelsfolio.png" alt=""><span class="entry-name">ReelsFolio</span></a></div>
             <div class="entry-panel"><div class="entry-body">
               <p>A place to watch the films I shoot and cut. Scrolls like a reel, not a slide deck. <span class="ext">↗</span></p>
             </div></div>
-          </a>
-          <a class="entry" href="https://www.figma.com/community/plugin/1510039474871692985/huerex-bulk-edit-colors" target="_blank" rel="noopener noreferrer">
-            <div class="entry-head"><span class="entry-meta">Plugin</span><span class="entry-title"><img class="entry-logo" src="images/logos/huerex.png" alt="">HueRex</span></div>
+          </article>
+          <article class="entry">
+            <div class="entry-head"><span class="entry-meta">Plugin</span><a class="entry-title" href="https://www.figma.com/community/plugin/1510039474871692985/huerex-bulk-edit-colors" target="_blank" rel="noopener noreferrer"><img class="entry-logo" src="images/logos/huerex.png" alt=""><span class="entry-name">HueRex</span></a></div>
             <div class="entry-panel"><div class="entry-body">
               <p>Edit hue, saturation, and brightness across any Figma selection. Loved by 500+ people. <span class="ext">↗</span></p>
             </div></div>
-          </a>
+          </article>
         </div>
       </section>
 
@@ -414,18 +464,230 @@
       if (document.getElementById(id)) setActive(id);
     }
 
-    if (!window.matchMedia("(hover: hover)").matches) {
-      document.querySelectorAll(".entry, .job").forEach((entry) => {
-        entry.addEventListener("click", (event) => {
-          if (event.target.closest("a")) return;
-          const open = entry.classList.contains("is-open");
-          entry.parentElement.querySelectorAll(".is-open").forEach((other) => {
-            if (other !== entry) other.classList.remove("is-open");
-          });
-          entry.classList.toggle("is-open", !open);
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const hasFlip = typeof gsap !== "undefined" && typeof Flip !== "undefined";
+
+    if (hasFlip) gsap.registerPlugin(Flip);
+
+    const bodyOf = (item) => item?.querySelector(".entry-body, .job-detail");
+
+    const fadeBody = (body, show) => {
+      if (!body || typeof gsap === "undefined" || reduceMotion) {
+        if (body) body.style.opacity = show ? "1" : "0";
+        return;
+      }
+
+      const media = body.querySelectorAll(".entry-gallery > *");
+      gsap.killTweensOf([body, media]);
+
+      if (!show) {
+        gsap.to(body, {
+          opacity: 0,
+          filter: "blur(8px)",
+          y: 4,
+          duration: 0.22,
+          ease: "power2.in",
+          overwrite: true
         });
+        if (media.length) {
+          gsap.to(media, {
+            opacity: 0,
+            filter: "blur(8px)",
+            duration: 0.18,
+            ease: "power2.in",
+            overwrite: true
+          });
+        }
+        return;
+      }
+
+      gsap.fromTo(body, {
+        opacity: 0,
+        filter: "blur(10px)",
+        y: 8
+      }, {
+        opacity: 1,
+        filter: "blur(0px)",
+        y: 0,
+        duration: 0.48,
+        delay: 0.08,
+        ease: "power2.out",
+        overwrite: true
       });
-    }
+
+      if (media.length) {
+        gsap.fromTo(media, {
+          opacity: 0,
+          filter: "blur(12px)",
+          scale: 0.96
+        }, {
+          opacity: 1,
+          filter: "blur(0px)",
+          scale: 1,
+          duration: 0.5,
+          delay: 0.12,
+          stagger: 0.06,
+          ease: "power2.out",
+          overwrite: true
+        });
+      }
+    };
+
+    const layout = (list, mutate, done) => {
+      const items = [...list.querySelectorAll(":scope > .entry, :scope > .job")];
+      const finish = () => done?.();
+
+      if (reduceMotion || typeof gsap === "undefined") {
+        mutate();
+        finish();
+        return;
+      }
+
+      gsap.killTweensOf(items);
+
+      if (hasFlip) {
+        const state = Flip.getState(items);
+        mutate();
+        Flip.from(state, {
+          duration: 0.72,
+          ease: "power3.out",
+          nested: true,
+          prune: true,
+          absoluteOnLeave: false,
+          onComplete: finish,
+          onInterrupt: finish
+        });
+        return;
+      }
+
+      const first = items.map((item) => item.getBoundingClientRect().top);
+      mutate();
+      items.forEach((item, index) => {
+        const dy = first[index] - item.getBoundingClientRect().top;
+        if (Math.abs(dy) < 0.5) return;
+        gsap.fromTo(item, { y: dy }, { y: 0, duration: 0.72, ease: "power3.out", overwrite: true });
+      });
+      window.setTimeout(finish, 720);
+    };
+
+    const resets = [];
+
+    document.querySelectorAll(".entry-list, .job-list").forEach((list) => {
+      const items = [...list.querySelectorAll(":scope > .entry, :scope > .job")];
+      let current = null;
+      let leaveTimer = 0;
+      let enterTimer = 0;
+      let flipping = false;
+      let pointer = { x: 0, y: 0 };
+
+      const itemFromPoint = () => {
+        const el = document.elementFromPoint(pointer.x, pointer.y);
+        const item = el?.closest(".entry, .job");
+        return item && list.contains(item) ? item : null;
+      };
+
+      const activate = (item) => {
+        window.clearTimeout(leaveTimer);
+        window.clearTimeout(enterTimer);
+        if (current === item || flipping) return;
+        fadeBody(bodyOf(current), false);
+        flipping = true;
+        layout(list, () => {
+          current?.classList.remove("is-hot");
+          item.classList.add("is-hot");
+          current = item;
+        }, () => {
+          flipping = false;
+          const still = itemFromPoint();
+          if (still && still !== current) activate(still);
+          if (!still) clear();
+        });
+        fadeBody(bodyOf(item), true);
+      };
+
+      const clear = () => {
+        if (!current || flipping) return;
+        fadeBody(bodyOf(current), false);
+        flipping = true;
+        layout(list, () => {
+          current.classList.remove("is-hot");
+          current = null;
+        }, () => {
+          flipping = false;
+          const still = itemFromPoint();
+          if (still) activate(still);
+        });
+      };
+
+      const reset = () => {
+        window.clearTimeout(leaveTimer);
+        window.clearTimeout(enterTimer);
+        flipping = false;
+        if (document.activeElement instanceof HTMLElement) {
+          const focused = document.activeElement.closest(".entry, .job");
+          if (focused && list.contains(focused)) document.activeElement.blur();
+        }
+        if (!current) return;
+        fadeBody(bodyOf(current), false);
+        current.classList.remove("is-hot");
+        current = null;
+      };
+
+      resets.push(reset);
+
+      if (canHover) {
+        list.addEventListener("pointermove", (event) => {
+          pointer.x = event.clientX;
+          pointer.y = event.clientY;
+        });
+        items.forEach((item) => {
+          item.addEventListener("pointerenter", () => {
+            window.clearTimeout(leaveTimer);
+            if (flipping || current === item) return;
+            window.clearTimeout(enterTimer);
+            enterTimer = window.setTimeout(() => activate(item), 80);
+          });
+          item.addEventListener("pointerleave", (event) => {
+            if (flipping) return;
+            if (event.relatedTarget instanceof Node && item.contains(event.relatedTarget)) return;
+            window.clearTimeout(enterTimer);
+            leaveTimer = window.setTimeout(() => {
+              if (itemFromPoint()) return;
+              clear();
+            }, 160);
+          });
+          item.addEventListener("click", (event) => {
+            if (!event.target.closest("a[href]")) return;
+            reset();
+          });
+        });
+        list.addEventListener("pointerleave", () => {
+          window.clearTimeout(enterTimer);
+          if (flipping) return;
+          leaveTimer = window.setTimeout(clear, 160);
+        });
+      } else {
+        items.forEach((item) => {
+          item.addEventListener("click", (event) => {
+            if (event.target.closest("a[href]")) return;
+            if (item.classList.contains("is-hot")) {
+              clear();
+              return;
+            }
+            activate(item);
+          });
+        });
+      }
+    });
+
+    const resetLists = () => resets.forEach((reset) => reset());
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) resetLists();
+    });
+    window.addEventListener("pagehide", resetLists);
+    window.addEventListener("pageshow", resetLists);
+    window.addEventListener("blur", resetLists);
 
     const copyButton = document.querySelector("[data-copy-email]");
     copyButton?.addEventListener("click", async () => {
