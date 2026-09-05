@@ -14,6 +14,16 @@
   --section-gap: 48px;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --display: "Momo Trust Display", "Inter", sans-serif;
+  --dot-gap: 14px;
+  --dot-size: 0.7px;
+  --dot-fill: rgba(102, 96, 82, 0.11);
+  --dot-offset-x: -6px;
+  --dot-offset-y: -10px;
+  --dot-fade-x: 33%;
+  --dot-fade-y: 40%;
+  --dot-fade-end: 0.5;
+  --dot-scroll: 0px;
+  --dot-page-height: 100vh;
 }
 
 * {
@@ -27,6 +37,7 @@ html {
 }
 
 body {
+  position: relative;
   min-width: 320px;
   margin: 0;
   color: var(--ink);
@@ -45,7 +56,17 @@ html.is-viewing body {
   overflow: hidden;
 }
 
+html.is-viewing body {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
 html.is-gated body > *:not(.site-gate) {
+  display: none !important;
+}
+
+html.is-gated .dot-grid {
   display: none !important;
 }
 
@@ -158,7 +179,36 @@ h3 {
 
 .page-shell {
   position: relative;
+  z-index: 1;
   padding: 0 var(--page-padding);
+}
+
+.dot-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(to right, rgb(0 0 0 / var(--dot-fade-end)), #000 var(--dot-fade-x), #000 calc(100% - var(--dot-fade-x)), rgb(0 0 0 / var(--dot-fade-end))),
+    linear-gradient(to bottom, rgb(0 0 0 / var(--dot-fade-end)), #000 var(--dot-fade-y), #000 calc(100% - var(--dot-fade-y)), rgb(0 0 0 / var(--dot-fade-end)));
+  mask-image:
+    linear-gradient(to right, rgb(0 0 0 / var(--dot-fade-end)), #000 var(--dot-fade-x), #000 calc(100% - var(--dot-fade-x)), rgb(0 0 0 / var(--dot-fade-end))),
+    linear-gradient(to bottom, rgb(0 0 0 / var(--dot-fade-end)), #000 var(--dot-fade-y), #000 calc(100% - var(--dot-fade-y)), rgb(0 0 0 / var(--dot-fade-end)));
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.dot-grid-paper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: max(100%, var(--dot-page-height));
+  background-image: radial-gradient(circle, var(--dot-fill) var(--dot-size), transparent calc(var(--dot-size) + 0.45px));
+  background-size: var(--dot-gap) var(--dot-gap);
+  background-position: var(--dot-offset-x) var(--dot-offset-y);
+  transform: translate3d(0, calc(-1 * var(--dot-scroll)), 0);
 }
 
 .index-rail {
@@ -169,7 +219,7 @@ h3 {
   width: 180px;
   height: 100vh;
   padding: 36px 0 32px;
-  background: var(--paper);
+  background: transparent;
   pointer-events: none;
 }
 
@@ -614,9 +664,22 @@ a.entry-title {
   overflow: hidden;
   padding: 16px 20px 14px;
   color: var(--ink);
-  background: rgba(244, 241, 234, 0.18);
+  background: none;
+}
+
+.photo-viewer::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(244, 241, 234, 0.62);
   -webkit-backdrop-filter: blur(7px);
   backdrop-filter: blur(7px);
+  content: "";
+}
+
+.photo-viewer > * {
+  position: relative;
+  z-index: 1;
 }
 
 .photo-viewer[hidden] {
@@ -752,6 +815,14 @@ a.entry-title {
   color: var(--muted);
   font-size: 14px;
   line-height: 1.5;
+}
+
+.photo-viewer-meta,
+.photo-viewer-kicker,
+.photo-viewer-title,
+.photo-viewer-copy,
+.photo-viewer-count {
+  filter: none !important;
 }
 
 .photo-viewer-strip {
@@ -968,6 +1039,8 @@ a.entry-title {
 }
 
 .resume {
+  position: relative;
+  z-index: 1;
   max-width: var(--content);
   margin: 0 auto;
 }
@@ -1058,7 +1131,76 @@ a.entry-title {
   }
 }
 
+.scroll-blur {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  height: 88px;
+  pointer-events: none;
+}
+
+.scroll-blur span {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--b));
+  backdrop-filter: blur(var(--b));
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+}
+
+.scroll-blur span:nth-child(1) {
+  --b: 0.2px;
+  --mask: linear-gradient(to bottom, transparent 0%, #000 12.5%, #000 25%, transparent 37.5%);
+}
+
+.scroll-blur span:nth-child(2) {
+  --b: 0.4px;
+  --mask: linear-gradient(to bottom, transparent 12.5%, #000 25%, #000 37.5%, transparent 50%);
+}
+
+.scroll-blur span:nth-child(3) {
+  --b: 0.8px;
+  --mask: linear-gradient(to bottom, transparent 25%, #000 37.5%, #000 50%, transparent 62.5%);
+}
+
+.scroll-blur span:nth-child(4) {
+  --b: 1.6px;
+  --mask: linear-gradient(to bottom, transparent 37.5%, #000 50%, #000 62.5%, transparent 75%);
+}
+
+.scroll-blur span:nth-child(5) {
+  --b: 3px;
+  --mask: linear-gradient(to bottom, transparent 50%, #000 62.5%, #000 75%, transparent 87.5%);
+}
+
+.scroll-blur span:nth-child(6) {
+  --b: 6px;
+  --mask: linear-gradient(to bottom, transparent 62.5%, #000 75%, #000 87.5%, transparent 100%);
+}
+
+.scroll-blur span:nth-child(7) {
+  --b: 11px;
+  --mask: linear-gradient(to bottom, transparent 75%, #000 87.5%, #000 100%);
+}
+
+.scroll-blur span:nth-child(8) {
+  --b: 18px;
+  --mask: linear-gradient(to bottom, transparent 87.5%, #000 100%);
+}
+
+html.is-viewing .scroll-blur,
+html:has(.photo-viewer:not([hidden])) .scroll-blur {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .scroll-blur {
+    display: none;
+  }
+
   .entry.is-hot .entry-body,
   .job.is-hot .entry-body {
     opacity: 1;
@@ -1078,7 +1220,11 @@ a.entry-title {
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .photo-viewer {
+  .scroll-blur {
+    display: none;
+  }
+
+  .photo-viewer::before {
     background: rgba(244, 241, 234, 0.88);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
