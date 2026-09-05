@@ -348,9 +348,15 @@
             <div class="entry-panel"><div class="entry-body">
               <p>This is where the week happens. Figma on one side, notes on the other, and a tab count I don’t advertise.</p>
               <div class="entry-gallery">
-                <img src="images/workspaces/desk.jpg" alt="A warm desk with a closed laptop, notebook, and plants.">
-                <img src="images/workspaces/desk-detail.jpg" alt="Notebook, cup, and pen on the desk.">
-                <img src="images/workspaces/monitor.jpg" alt="A single monitor on the desk in soft light.">
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/desk.jpg" alt="A warm desk with a closed laptop, notebook, and plants.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/desk-detail.jpg" alt="Notebook, cup, and pen on the desk.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/monitor.jpg" alt="A single monitor on the desk in soft light.">
+                </button>
               </div>
             </div></div>
           </article>
@@ -359,8 +365,12 @@
             <div class="entry-panel"><div class="entry-body">
               <p>The camera I actually take out. Still learning what to keep, what to leave, and when to just press record.</p>
               <div class="entry-gallery">
-                <img src="images/workspaces/camera.jpg" alt="A compact mirrorless camera on a table.">
-                <img src="images/workspaces/bag.jpg" alt="An open camera bag on a stone step.">
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/camera.jpg" alt="A compact mirrorless camera on a table.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/bag.jpg" alt="An open camera bag on a stone step.">
+                </button>
               </div>
             </div></div>
           </article>
@@ -369,8 +379,12 @@
             <div class="entry-panel"><div class="entry-body">
               <p>A quieter setup for Resolve. Same thirty seconds, more times than I should, until the cut feels like the day I remember.</p>
               <div class="entry-gallery">
-                <img src="images/workspaces/edit.jpg" alt="A dark edit corner with monitor glow.">
-                <img src="images/workspaces/edit-detail.jpg" alt="Headphones and a lamp on the edit desk.">
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/edit.jpg" alt="A dark edit corner with monitor glow.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/workspaces/edit-detail.jpg" alt="Headphones and a lamp on the edit desk.">
+                </button>
               </div>
             </div></div>
           </article>
@@ -388,8 +402,12 @@
             <div class="entry-panel"><div class="entry-body">
               <p>Wrong settings, better light than I deserved, and a lot of deleting.</p>
               <div class="entry-gallery">
-                <img src="images/bts/camera.jpg" alt="Still from the Sakleshpur film.">
-                <img src="images/films/sakleshpur.jpg" alt="Another frame from Sakleshpur.">
+                <button type="button" class="gallery-shot">
+                  <img src="images/bts/camera.jpg" alt="Still from the Sakleshpur film.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/films/sakleshpur.jpg" alt="Another frame from Sakleshpur.">
+                </button>
               </div>
             </div></div>
           </article>
@@ -398,8 +416,12 @@
             <div class="entry-panel"><div class="entry-body">
               <p>Finding the cut by watching the same thirty seconds more times than I should.</p>
               <div class="entry-gallery">
-                <img src="images/bts/edit.jpg" alt="Still from Delhi in a Lapse.">
-                <img src="images/films/delhi.jpg" alt="Another frame from Delhi in a Lapse.">
+                <button type="button" class="gallery-shot">
+                  <img src="images/bts/edit.jpg" alt="Still from Delhi in a Lapse.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/films/delhi.jpg" alt="Another frame from Delhi in a Lapse.">
+                </button>
               </div>
             </div></div>
           </article>
@@ -408,8 +430,12 @@
             <div class="entry-panel"><div class="entry-body">
               <p>Notes, rough exports, and the version that almost went out.</p>
               <div class="entry-gallery">
-                <img src="images/bts/notes.jpg" alt="Still from the Ladakh film.">
-                <img src="images/films/ladakh.jpg" alt="Another frame from Ladakh.">
+                <button type="button" class="gallery-shot">
+                  <img src="images/bts/notes.jpg" alt="Still from the Ladakh film.">
+                </button>
+                <button type="button" class="gallery-shot">
+                  <img src="images/films/ladakh.jpg" alt="Another frame from Ladakh.">
+                </button>
               </div>
             </div></div>
           </article>
@@ -433,6 +459,30 @@
         </footer>
       </section>
     </main>
+  </div>
+
+  <div class="photo-viewer" hidden role="dialog" aria-modal="true" aria-labelledby="photo-viewer-title">
+    <div class="photo-viewer-bar">
+      <button type="button" class="photo-viewer-close">Close</button>
+      <p class="photo-viewer-count"></p>
+    </div>
+    <div class="photo-viewer-stage">
+      <button type="button" class="photo-viewer-step is-prev" aria-label="Previous photo">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.2 2.6 4.8 8l5.4 5.4"/></svg>
+      </button>
+      <figure>
+        <img alt="">
+      </figure>
+      <button type="button" class="photo-viewer-step is-next" aria-label="Next photo">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.8 2.6 11.2 8l-5.4 5.4"/></svg>
+      </button>
+    </div>
+    <div class="photo-viewer-meta">
+      <p class="photo-viewer-kicker"></p>
+      <h3 class="photo-viewer-title" id="photo-viewer-title"></h3>
+      <p class="photo-viewer-copy"></p>
+    </div>
+    <div class="photo-viewer-strip" role="tablist" aria-label="All photos"></div>
   </div>
 
   <script>
@@ -658,6 +708,7 @@
             }, 160);
           });
           item.addEventListener("click", (event) => {
+            if (event.target.closest(".gallery-shot")) return;
             if (!event.target.closest("a[href]")) return;
             reset();
           });
@@ -670,7 +721,7 @@
       } else {
         items.forEach((item) => {
           item.addEventListener("click", (event) => {
-            if (event.target.closest("a[href]")) return;
+            if (event.target.closest("a[href], .gallery-shot")) return;
             if (item.classList.contains("is-hot")) {
               clear();
               return;
@@ -688,6 +739,240 @@
     window.addEventListener("pagehide", resetLists);
     window.addEventListener("pageshow", resetLists);
     window.addEventListener("blur", resetLists);
+
+    const viewer = document.querySelector(".photo-viewer");
+    const viewerImage = viewer?.querySelector(".photo-viewer-stage img");
+    const viewerKicker = viewer?.querySelector(".photo-viewer-kicker");
+    const viewerTitle = viewer?.querySelector(".photo-viewer-title");
+    const viewerCopy = viewer?.querySelector(".photo-viewer-copy");
+    const viewerCount = viewer?.querySelector(".photo-viewer-count");
+    const viewerStrip = viewer?.querySelector(".photo-viewer-strip");
+    const shots = [...document.querySelectorAll(".gallery-shot")].map((button) => {
+      const img = button.querySelector("img");
+      const entry = button.closest(".entry");
+      const section = button.closest("section");
+      return {
+        button,
+        src: img.getAttribute("src"),
+        alt: img.getAttribute("alt") || "",
+        title: entry?.querySelector(".entry-title")?.textContent.trim() || "",
+        label: entry?.querySelector(".entry-meta")?.textContent.trim() || "",
+        copy: entry?.querySelector(".entry-body p")?.textContent.trim() || "",
+        section: section?.querySelector("h2")?.textContent.trim() || ""
+      };
+    });
+
+    if (viewer && viewerImage && viewerStrip && shots.length) {
+      let current = 0;
+      let lastFocus = null;
+      let swipeX = 0;
+      let busy = false;
+      const viewerBar = viewer.querySelector(".photo-viewer-bar");
+      const viewerMeta = viewer.querySelector(".photo-viewer-meta");
+      const viewerSteps = viewer.querySelectorAll(".photo-viewer-step");
+      const motion = typeof gsap !== "undefined" && !reduceMotion;
+      const chrome = [viewerBar, viewerMeta, viewerStrip, ...viewerSteps].filter(Boolean);
+
+      shots.forEach((shot, index) => {
+        const thumb = document.createElement("button");
+        const thumbImage = document.createElement("img");
+        thumb.type = "button";
+        thumb.setAttribute("role", "tab");
+        thumbImage.src = shot.src;
+        thumbImage.alt = "";
+        thumb.append(thumbImage);
+        thumb.addEventListener("click", () => show(index, index > current ? 1 : -1));
+        viewerStrip.append(thumb);
+        shot.thumb = thumb;
+        shot.button.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          open(index);
+        });
+      });
+
+      const thumbs = shots.map((shot) => shot.thumb);
+
+      const paint = (index) => {
+        current = (index + shots.length) % shots.length;
+        const shot = shots[current];
+        viewerImage.src = shot.src;
+        viewerImage.alt = shot.alt;
+        viewerKicker.textContent = [shot.section, shot.label].filter(Boolean).join(" · ");
+        viewerTitle.textContent = shot.title;
+        viewerCopy.textContent = shot.copy;
+        viewerCount.textContent = `${current + 1} of ${shots.length}`;
+        thumbs.forEach((thumb, i) => {
+          const on = i === current;
+          thumb.classList.toggle("is-current", on);
+          thumb.setAttribute("aria-selected", on ? "true" : "false");
+          if (on) {
+            const left = thumb.offsetLeft - (viewerStrip.clientWidth / 2) + (thumb.offsetWidth / 2);
+            viewerStrip.scrollTo({ left, behavior: reduceMotion ? "auto" : "smooth" });
+          }
+        });
+        const next = shots[(current + 1) % shots.length];
+        const prev = shots[(current - 1 + shots.length) % shots.length];
+        [next.src, prev.src].forEach((src) => {
+          const preload = new Image();
+          preload.src = src;
+        });
+      };
+
+      const show = (index, dir = 0) => {
+        const nextIndex = (index + shots.length) % shots.length;
+        if (nextIndex === current && viewerImage.getAttribute("src")) return;
+
+        if (!motion || !viewer.classList.contains("is-open")) {
+          paint(nextIndex);
+          return;
+        }
+
+        const away = dir === 0 ? 0 : dir * 28;
+        gsap.killTweensOf([viewerImage, viewerKicker, viewerTitle, viewerCopy, viewerCount]);
+        gsap.to([viewerImage, viewerKicker, viewerTitle, viewerCopy], {
+          opacity: 0,
+          x: -away,
+          filter: "blur(6px)",
+          duration: 0.16,
+          ease: "power2.in",
+          overwrite: true,
+          onComplete: () => {
+            paint(nextIndex);
+            gsap.fromTo(viewerImage, {
+              opacity: 0,
+              x: away,
+              filter: "blur(8px)"
+            }, {
+              opacity: 1,
+              x: 0,
+              filter: "blur(0px)",
+              duration: 0.38,
+              ease: "power3.out",
+              overwrite: true
+            });
+            gsap.fromTo([viewerKicker, viewerTitle, viewerCopy, viewerCount], {
+              opacity: 0,
+              y: 6
+            }, {
+              opacity: 1,
+              y: 0,
+              duration: 0.32,
+              stagger: 0.03,
+              ease: "power2.out",
+              overwrite: true
+            });
+          }
+        });
+      };
+
+      const open = (index) => {
+        lastFocus = document.activeElement;
+        if (motion) gsap.set([viewer, viewerImage, ...chrome], { opacity: 0 });
+        viewer.hidden = false;
+        document.documentElement.classList.add("is-viewing");
+        paint(index);
+        viewer.classList.add("is-open");
+        viewer.querySelector(".photo-viewer-close")?.focus();
+
+        if (!motion) return;
+        gsap.killTweensOf([viewer, viewerImage, ...chrome]);
+        gsap.fromTo(viewer, { opacity: 0 }, {
+          opacity: 1,
+          duration: 0.32,
+          ease: "power2.out",
+          overwrite: true
+        });
+        gsap.fromTo(viewerImage, {
+          opacity: 0,
+          scale: 0.97,
+          y: 14,
+          filter: "blur(10px)"
+        }, {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.5,
+          ease: "power3.out",
+          overwrite: true
+        });
+        gsap.fromTo(chrome, {
+          opacity: 0,
+          y: 8
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          delay: 0.06,
+          stagger: 0.03,
+          ease: "power2.out",
+          overwrite: true
+        });
+      };
+
+      const close = () => {
+        if (viewer.hidden || busy) return;
+        const finish = () => {
+          viewer.classList.remove("is-open");
+          viewer.hidden = true;
+          document.documentElement.classList.remove("is-viewing");
+          gsap?.set([viewer, viewerImage, ...chrome, viewerKicker, viewerTitle, viewerCopy, viewerCount], { clearProps: "all" });
+          if (lastFocus instanceof HTMLElement) lastFocus.focus();
+          busy = false;
+        };
+
+        if (!motion) {
+          finish();
+          return;
+        }
+
+        busy = true;
+        gsap.killTweensOf([viewer, viewerImage, ...chrome]);
+        gsap.to(viewerImage, {
+          opacity: 0,
+          scale: 0.98,
+          y: 8,
+          filter: "blur(6px)",
+          duration: 0.2,
+          ease: "power2.in",
+          overwrite: true
+        });
+        gsap.to(viewer, {
+          opacity: 0,
+          duration: 0.24,
+          delay: 0.04,
+          ease: "power2.in",
+          overwrite: true,
+          onComplete: finish
+        });
+      };
+
+      viewer.querySelector(".photo-viewer-close")?.addEventListener("click", close);
+      viewer.querySelector(".photo-viewer-step.is-prev")?.addEventListener("click", () => show(current - 1, -1));
+      viewer.querySelector(".photo-viewer-step.is-next")?.addEventListener("click", () => show(current + 1, 1));
+
+      viewer.addEventListener("click", (event) => {
+        if (event.target === viewer) close();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (viewer.hidden) return;
+        if (event.key === "Escape") close();
+        if (event.key === "ArrowRight") show(current + 1, 1);
+        if (event.key === "ArrowLeft") show(current - 1, -1);
+      });
+
+      const stage = viewer.querySelector(".photo-viewer-stage figure");
+      stage?.addEventListener("pointerdown", (event) => {
+        swipeX = event.clientX;
+      });
+      stage?.addEventListener("pointerup", (event) => {
+        const dx = event.clientX - swipeX;
+        if (dx > 48) show(current - 1, -1);
+        if (dx < -48) show(current + 1, 1);
+      });
+    }
 
     const copyButton = document.querySelector("[data-copy-email]");
     copyButton?.addEventListener("click", async () => {
