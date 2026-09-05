@@ -4,8 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ece9e1">
+  <meta name="robots" content="noindex, nofollow">
   <title>Résumé — Vibhore Singhal</title>
   <link rel="stylesheet" href="styles.css">
+  <script>
+    try {
+      if (sessionStorage.getItem("vs-gate") !== "ok") document.documentElement.classList.add("is-gated");
+    } catch {
+      document.documentElement.classList.add("is-gated");
+    }
+  </script>
 </head>
 <body class="resume-page">
   <a class="skip-link" href="#resume">Skip to content</a>
@@ -49,5 +57,6 @@
       <li>Ladakh, 2018</li>
     </ul>
   </main>
+  <script src="gate.js"></script>
 </body>
 </html>

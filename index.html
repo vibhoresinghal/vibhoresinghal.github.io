@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ece9e1">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Vibhore Singhal is a designer and filmmaker in Bangalore, working on financial products at Zeta and making tools, films, and small internet things.">
+  <script>
+    try {
+      if (sessionStorage.getItem("vs-gate") !== "ok") document.documentElement.classList.add("is-gated");
+    } catch {
+      document.documentElement.classList.add("is-gated");
+    }
+  </script>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://vibhoresinghal.com/">
   <meta property="og:title" content="Vibhore Singhal — Designer & Filmmaker">
@@ -401,5 +409,6 @@
       }, 1600);
     });
   </script>
+  <script src="gate.js"></script>
 </body>
 </html>
