@@ -16,62 +16,115 @@
   <link rel="canonical" href="https://vibhoresinghal.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Momo+Trust+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Momo+Trust+Display&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23151916'/%3E%3Cpath d='M23 27h16l11 30 11-30h16L57 76H43L23 27Z' fill='%23ece9e1'/%3E%3C/svg%3E">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <a class="monogram" href="#intro" aria-label="Vibhore Singhal, home">VS</a>
-    <nav class="top-nav" aria-label="Primary navigation">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <span class="availability"><i aria-hidden="true"></i>Bangalore, India</span>
-  </header>
-
   <div class="page-shell">
     <aside class="index-rail" aria-label="Page index">
       <p>Index</p>
       <ol>
-        <li><a href="#intro"><span>01</span>Intro</a></li>
-        <li><a href="#now"><span>02</span>Now</a></li>
-        <li><a href="#work"><span>03</span>Selected work</a></li>
-        <li><a href="#side-projects"><span>04</span>Side projects</a></li>
-        <li><a href="#films"><span>05</span>Films</a></li>
-        <li><a href="#about"><span>06</span>About</a></li>
-        <li><a href="#contact"><span>07</span>Contact</a></li>
+        <li>
+          <a href="#intro" class="is-active">
+            <span>01</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.2 8 2.5l5.5 4.7V13a.8.8 0 0 1-.8.8H9.2V10H6.8v3.8H3.3A.8.8 0 0 1 2.5 13Z"/></svg>
+            Intro
+          </a>
+        </li>
+        <li>
+          <a href="#now">
+            <span>02</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3.2l2 1.3"/></svg>
+            Now
+          </a>
+        </li>
+        <li>
+          <a href="#learning">
+            <span>03</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.4 4.2 8 2.6l5.6 1.6v6.6c0 .8-2.4 2.2-5.6 2.8-3.2-.6-5.6-2-5.6-2.8Z"/><path d="M13.6 4.4v6.4"/><path d="M5.2 6.2v4.4"/></svg>
+            Currently learning
+          </a>
+        </li>
+        <li>
+          <a href="#work">
+            <span>04</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.2" y="5.2" width="11.6" height="8" rx="1.2"/><path d="M5.5 5.2V4.1A1.6 1.6 0 0 1 7.1 2.5h1.8A1.6 1.6 0 0 1 10.5 4.1v1.1M2.2 8.2h11.6"/></svg>
+            Selected work
+          </a>
+        </li>
+        <li>
+          <a href="#side-projects">
+            <span>05</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.4 13.2 5.4v5.2L8 13.6 2.8 10.6V5.4Z"/><path d="M8 2.4v11.2M2.8 5.4 8 8.4l5.2-3"/></svg>
+            Side projects
+          </a>
+        </li>
+        <li>
+          <a href="#films">
+            <span>06</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.2" y="3.2" width="11.6" height="9.6" rx="1.4"/><path d="M6.6 6v4l3.6-2Z"/></svg>
+            Films
+          </a>
+        </li>
+        <li>
+          <a href="#hobbies">
+            <span>07</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 5.6h2.1l1-1.5h3.8l1 1.5H13A1.2 1.2 0 0 1 14.2 6.8v5A1.2 1.2 0 0 1 13 13H3A1.2 1.2 0 0 1 1.8 11.8v-5A1.2 1.2 0 0 1 3 5.6Z"/><circle cx="8" cy="9.1" r="2.1"/></svg>
+            Hobbies
+          </a>
+        </li>
+        <li>
+          <a href="#workspaces">
+            <span>08</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="8.2" rx="1.2"/><path d="M6.2 13h3.6M8 11.2V13"/></svg>
+            Workspaces
+          </a>
+        </li>
+        <li>
+          <a href="#bts">
+            <span>09</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.4h10v8.2H3Z"/><path d="M3 4.4 5.2 2.4h2.1L5.2 4.4M8.7 2.4H10.8L8.7 4.4"/><path d="M5.4 4.4v8.2M10.6 4.4v8.2"/></svg>
+            BTS
+          </a>
+        </li>
+        <li>
+          <a href="#about">
+            <span>10</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.4" r="2.2"/><path d="M3.6 13c.5-2.4 2.1-3.6 4.4-3.6s3.9 1.2 4.4 3.6"/></svg>
+            About
+          </a>
+        </li>
+        <li>
+          <a href="#contact">
+            <span>11</span>
+            <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.2" y="3.6" width="11.6" height="8.8" rx="1.2"/><path d="m2.6 4.6 5.4 4 5.4-4"/></svg>
+            Contact
+          </a>
+        </li>
       </ol>
     </aside>
 
     <main id="main">
-      <section class="hero section" id="intro">
-        <p class="eyebrow">Hello there. My name is Vibhore.</p>
-        <h1>I design products<br>and make <em>films.</em></h1>
+      <section class="hero" id="intro">
+        <p class="signature">vibhore singhal</p>
+        <h1>
+          Hello there.<br>
+          My name is Vibhore.<br>
+          I design products and make films.
+        </h1>
         <div class="hero-copy">
-          <p>I’m a Senior UX Designer at Zeta, working on financial products that make complicated things feel clear.</p>
-          <p>Outside work, I build small tools, experiment with code, and point my camera at people and places I want to remember.</p>
+          <p>I’m a Senior UX Designer at <a href="https://www.zeta.tech/" target="_blank" rel="noopener noreferrer">Zeta</a>, working on financial products that make complicated things feel clear.</p>
+          <p>On the side I build small tools—most recently <a href="https://www.figma.com/community/plugin/1510039474871692985/huerex" target="_blank" rel="noopener noreferrer">HueRex</a> and <a href="/reelsfolio/">ReelsFolio</a>.</p>
+          <p>After hours I point a Fujifilm X-S20 at people and places I want to remember.</p>
         </div>
-        <div class="hero-actions">
-          <a class="button button-primary" href="/reelsfolio/">
-            Explore ReelsFolio
-            <span aria-hidden="true">↗</span>
-          </a>
-          <a class="text-link" href="mailto:vibhoresinghal60@gmail.com">Say hello <span aria-hidden="true">↗</span></a>
-        </div>
-        <div class="hero-stamp" aria-hidden="true">
-          <span>DESIGN</span>
-          <b>×</b>
-          <span>FILM</span>
-        </div>
+        <a class="button button-primary" href="mailto:vibhoresinghal60@gmail.com">Let’s chat</a>
       </section>
 
-      <section class="section ruled" id="now">
+      <section class="section" id="now">
         <header class="section-heading">
-          <p class="section-number">02</p>
           <h2>Now</h2>
           <p>A small snapshot of what has my attention.</p>
         </header>
@@ -82,15 +135,13 @@
               <h3>Designing at Zeta</h3>
               <p>Shaping acquisition, growth, and everyday banking experiences.</p>
             </div>
-            <span class="row-mark" aria-hidden="true">↗</span>
           </article>
           <article class="list-row">
             <p class="row-meta">Building</p>
             <div>
               <h3>Making tools with code</h3>
-              <p>Learning by shipping small, useful things—most recently HueRex and this portfolio.</p>
+              <p>Learning by shipping small, useful things—HueRex, ReelsFolio, this site.</p>
             </div>
-            <span class="row-mark" aria-hidden="true">↗</span>
           </article>
           <article class="list-row">
             <p class="row-meta">After hours</p>
@@ -98,14 +149,42 @@
               <h3>Filming life as it happens</h3>
               <p>Trips, streets, friends, and experiments with a Fujifilm X-S20.</p>
             </div>
-            <span class="row-mark" aria-hidden="true">↗</span>
           </article>
         </div>
       </section>
 
-      <section class="section ruled" id="work">
+      <section class="section" id="learning">
         <header class="section-heading">
-          <p class="section-number">03</p>
+          <h2>Currently learning</h2>
+          <p>Skills I’m building so the films get better.</p>
+        </header>
+        <div class="list">
+          <article class="list-row">
+            <p class="row-meta">Edit</p>
+            <div>
+              <h3>DaVinci Resolve</h3>
+              <p>Cutting, color, and finishing the films I shoot.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">Image</p>
+            <div>
+              <h3>Cinematography</h3>
+              <p>Light, framing, and how a camera should move through a scene.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">Craft</p>
+            <div>
+              <h3>Storytelling</h3>
+              <p>Finding the structure and pace that make a sequence hold together.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="work">
+        <header class="section-heading">
           <h2>Selected work</h2>
           <p>A few chapters from my product design practice.</p>
         </header>
@@ -116,8 +195,7 @@
               <h3>Acquisition on PayZapp</h3>
               <p>Onboarding, navigation, and the journeys that help people get started.</p>
             </div>
-            <p class="project-tag">Product design · Zeta</p>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <p class="project-tag">Zeta</p>
           </a>
           <a class="project-row" href="/reelsfolio/">
             <span class="project-index">02</span>
@@ -125,8 +203,7 @@
               <h3>Growth & Retention</h3>
               <p>Loops designed to make the product useful after the first transaction.</p>
             </div>
-            <p class="project-tag">Growth design · Zeta</p>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <p class="project-tag">Zeta</p>
           </a>
           <a class="project-row" href="/reelsfolio/">
             <span class="project-index">03</span>
@@ -134,8 +211,7 @@
               <h3>Unicorn Design System</h3>
               <p>A shared system for consistent experiences and faster product teams.</p>
             </div>
-            <p class="project-tag">Design systems · Zeta</p>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <p class="project-tag">Zeta</p>
           </a>
           <a class="project-row" href="/reelsfolio/">
             <span class="project-index">04</span>
@@ -143,16 +219,13 @@
               <h3>Neo</h3>
               <p>A clearer and more confident everyday banking experience.</p>
             </div>
-            <p class="project-tag">Product design · Zeta</p>
-            <span class="project-arrow" aria-hidden="true">↗</span>
+            <p class="project-tag">Zeta</p>
           </a>
         </div>
-        <a class="section-cta" href="/reelsfolio/">Watch the work in ReelsFolio <span aria-hidden="true">↗</span></a>
       </section>
 
-      <section class="section ruled" id="side-projects">
+      <section class="section" id="side-projects">
         <header class="section-heading">
-          <p class="section-number">04</p>
           <h2>Side projects</h2>
           <p>Things I made because I wanted them to exist.</p>
         </header>
@@ -161,24 +234,23 @@
             <div class="card-topline"><span>Figma plugin</span><span>2025</span></div>
             <div>
               <h3>HueRex</h3>
-              <p>Edit hue, saturation, and brightness across any Figma selection without the repetitive work.</p>
+              <p>Edit hue, saturation, and brightness across any Figma selection.</p>
             </div>
-            <footer><span>Loved by 500+ people</span><span aria-hidden="true">↗</span></footer>
+            <footer><span>500+ users</span><span aria-hidden="true">↗</span></footer>
           </a>
           <a class="feature-card card-moss" href="/reelsfolio/">
             <div class="card-topline"><span>Web experiment</span><span>Ongoing</span></div>
             <div>
               <h3>ReelsFolio</h3>
-              <p>A portfolio you can scroll like a reel—built to make showing work feel less like presenting slides.</p>
+              <p>A portfolio you can scroll like a reel, not a slide deck.</p>
             </div>
-            <footer><span>Designed and coded by me</span><span aria-hidden="true">↗</span></footer>
+            <footer><span>Designed and coded</span><span aria-hidden="true">↗</span></footer>
           </a>
         </div>
       </section>
 
-      <section class="section ruled" id="films">
+      <section class="section" id="films">
         <header class="section-heading">
-          <p class="section-number">05</p>
           <h2>Films</h2>
           <p>Small records of places, firsts, and time passing.</p>
         </header>
@@ -186,30 +258,113 @@
           <a href="/reelsfolio/" class="film-card">
             <span>01</span>
             <div><h3>A Weekend in Sakleshpur</h3><p>My first film with the Fujifilm X-S20.</p></div>
-            <b aria-hidden="true">Play ↗</b>
           </a>
           <a href="/reelsfolio/" class="film-card">
             <span>02</span>
             <div><h3>Delhi in a Lapse</h3><p>The first video I ever made.</p></div>
-            <b aria-hidden="true">Play ↗</b>
           </a>
           <a href="/reelsfolio/" class="film-card">
             <span>03</span>
             <div><h3>Ladakh, 2018</h3><p>That one college trip.</p></div>
-            <b aria-hidden="true">Play ↗</b>
           </a>
         </div>
       </section>
 
-      <section class="section ruled about" id="about">
+      <section class="section" id="hobbies">
         <header class="section-heading">
-          <p class="section-number">06</p>
+          <h2>Hobbies</h2>
+          <p>What I reach for when the laptop closes.</p>
+        </header>
+        <div class="list">
+          <article class="list-row">
+            <p class="row-meta">Film</p>
+            <div>
+              <h3>Shooting and cutting small films</h3>
+              <p>Weekends, trips, and whatever light is doing that day.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">Cameras</p>
+            <div>
+              <h3>Learning the Fujifilm X-S20</h3>
+              <p>Still figuring out what to keep, what to leave, and when to just press record.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">Code</p>
+            <div>
+              <h3>Building tiny tools</h3>
+              <p>If a task nags me twice, I usually try to make something for it.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="workspaces">
+        <header class="section-heading">
+          <h2>Workspaces</h2>
+          <p>The rooms and bags where the work actually happens.</p>
+        </header>
+        <div class="list">
+          <article class="list-row">
+            <p class="row-meta">Bangalore</p>
+            <div>
+              <h3>The desk</h3>
+              <p>Where most product work happens—Figma, notes, and too many tabs.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">After hours</p>
+            <div>
+              <h3>The edit corner</h3>
+              <p>A quieter setup for cutting films and sitting with footage a little longer.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">Outside</p>
+            <div>
+              <h3>Camera bag, wherever I am</h3>
+              <p>Streets, trips, and the in-between moments that don’t wait for a plan.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="bts">
+        <header class="section-heading">
+          <h2>BTS</h2>
+          <p>The unpolished bits behind the films and the making.</p>
+        </header>
+        <div class="list">
+          <article class="list-row">
+            <p class="row-meta">01</p>
+            <div>
+              <h3>First days with the X-S20</h3>
+              <p>Wrong settings, better light than I deserved, and a lot of deleting.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">02</p>
+            <div>
+              <h3>Edit nights</h3>
+              <p>Finding the cut by watching the same thirty seconds more times than I should.</p>
+            </div>
+          </article>
+          <article class="list-row">
+            <p class="row-meta">03</p>
+            <div>
+              <h3>Before it looks finished</h3>
+              <p>Notes, rough exports, and the version that almost went out.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section about" id="about">
+        <header class="section-heading">
           <h2>About</h2>
         </header>
-        <div class="about-copy">
-          <p>I’m a designer from Delhi, now living in Bangalore. I care about the details people feel before they know how to describe them—the pace of an interaction, a useful default, or a story told in the right order.</p>
-          <p>I like making things across mediums. Some become financial products used at scale, some become Figma plugins, and some become quiet films from a weekend away.</p>
-        </div>
+        <p class="about-copy">I’m a designer from Delhi, now in Bangalore. I care about the details people feel before they can name them—the pace of an interaction, a useful default, or a story told in the right order.</p>
         <dl class="facts">
           <div><dt>Based in</dt><dd>Bangalore / Delhi</dd></div>
           <div><dt>Currently</dt><dd>Senior UX Designer at Zeta</dd></div>
@@ -217,21 +372,42 @@
         </dl>
       </section>
 
-      <section class="section contact" id="contact">
-        <p class="eyebrow">Have something interesting in mind?</p>
-        <h2>Let’s make something<br><em>worth remembering.</em></h2>
+      <section class="contact" id="contact">
+        <p class="eyebrow">Have something in mind?</p>
+        <h2>Let’s make something <em>worth remembering.</em></h2>
         <a class="contact-email" href="mailto:vibhoresinghal60@gmail.com">vibhoresinghal60@gmail.com <span aria-hidden="true">↗</span></a>
         <footer class="site-footer">
           <p>© 2026 Vibhore Singhal</p>
           <nav aria-label="Social links">
-            <a href="https://www.linkedin.com/in/vibhoresinghal" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-            <a href="https://x.com/vibhxre" target="_blank" rel="noopener noreferrer">X / Twitter ↗</a>
-            <a href="https://github.com/vibhoresinghal" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/vibhoresinghal" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://x.com/vibhxre" target="_blank" rel="noopener noreferrer">X</a>
+            <a href="https://github.com/vibhoresinghal" target="_blank" rel="noopener noreferrer">GitHub</a>
           </nav>
-          <a href="#intro">Back to top ↑</a>
         </footer>
       </section>
     </main>
   </div>
+
+  <script>
+    const links = [...document.querySelectorAll(".index-rail a")];
+    const sections = links
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    const setActive = (id) => {
+      links.forEach((link) => {
+        link.classList.toggle("is-active", link.getAttribute("href") === `#${id}`);
+      });
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActive(visible.target.id);
+    }, { rootMargin: "-20% 0px -60% 0px", threshold: [0.1, 0.25, 0.5] });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
 </body>
 </html>
