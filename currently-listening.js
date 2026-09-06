@@ -45,7 +45,7 @@ const TRACKS = [
 ];
 
 const HILL_R = 8.6;
-const HILL_Y = 0.33;
+const HILL_Y = 0.36;
 const COVER = 0.58;
 const COVER_GAP = 0.7;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -93,19 +93,19 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2))
 renderer.setSize(window.innerWidth, window.innerHeight, false);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.08;
+renderer.toneMappingExposure = 1.18;
 renderer.shadowMap.enabled = !coarse;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.setClearColor(0x141820, 1);
+renderer.setClearColor(0x62b4eb, 1);
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xc46a38, 14, 32);
+scene.fog = new THREE.Fog(0x8ec8f0, 16, 36);
 
 const camera = new THREE.PerspectiveCamera(34, window.innerWidth / window.innerHeight, 0.1, 80);
-camera.position.set(0, 0.98, 6.05);
+camera.position.set(0, 0.92, 5.85);
 
-const sun = new THREE.DirectionalLight(0xffb066, 2.35);
-sun.position.set(-7.2, 1.8, -3.4);
+const sun = new THREE.DirectionalLight(0xfff6e8, 2.6);
+sun.position.set(-3.2, 6.8, 4.4);
 sun.castShadow = !coarse;
 if (sun.castShadow) {
   sun.shadow.mapSize.set(1024, 1024);
@@ -118,13 +118,13 @@ if (sun.castShadow) {
   sun.shadow.bias = -0.0008;
 }
 scene.add(sun);
-const fill = new THREE.DirectionalLight(0xfff1dd, 1.4);
-fill.position.set(2.2, 3.4, 7.2);
+const fill = new THREE.DirectionalLight(0xe7f3ff, 0.95);
+fill.position.set(3.4, 3.8, 6.2);
 scene.add(fill);
-scene.add(new THREE.HemisphereLight(0x6f86b8, 0x3a2010, 0.85));
-scene.add(new THREE.AmbientLight(0x9aa6c4, 0.42));
+scene.add(new THREE.HemisphereLight(0xb9d8f5, 0x3f7a36, 1.05));
+scene.add(new THREE.AmbientLight(0xd7e8f6, 0.55));
 
-const playGlow = new THREE.PointLight(0xffd8b0, 0.15, 4.5, 1.6);
+const playGlow = new THREE.PointLight(0xffffff, 0.12, 4.5, 1.6);
 playGlow.position.set(0, 1.05, 0.4);
 scene.add(playGlow);
 
@@ -144,15 +144,12 @@ const skyMat = new THREE.ShaderMaterial({
   fragmentShader: `
     varying vec3 vDir;
     void main() {
-      float h = vDir.y;
-      vec3 top = vec3(0.05, 0.10, 0.24);
-      vec3 mid = vec3(0.16, 0.22, 0.44);
-      vec3 hor = vec3(1.0, 0.62, 0.32);
-      vec3 low = vec3(0.48, 0.20, 0.10);
-      vec3 col = mix(low, hor, smoothstep(-0.22, 0.02, h));
-      col = mix(col, mid, smoothstep(0.02, 0.28, h));
-      col = mix(col, top, smoothstep(0.22, 0.82, h));
-      col += vec3(0.22, 0.08, 0.02) * (1.0 - smoothstep(0.0, 0.55, abs(vDir.x + 0.28))) * (1.0 - smoothstep(0.05, 0.45, h));
+      float h = clamp(vDir.y * 0.5 + 0.5, 0.0, 1.0);
+      vec3 top = vec3(0.31, 0.64, 0.90);
+      vec3 mid = vec3(0.47, 0.75, 0.94);
+      vec3 hor = vec3(0.74, 0.88, 0.97);
+      vec3 col = mix(hor, mid, smoothstep(0.38, 0.62, h));
+      col = mix(col, top, smoothstep(0.58, 0.95, h));
       gl_FragColor = vec4(col, 1.0);
     }
   `
@@ -162,7 +159,7 @@ scene.add(new THREE.Mesh(new THREE.SphereGeometry(36, 32, 24), skyMat));
 const hill = new THREE.Mesh(
   new THREE.SphereGeometry(HILL_R, 80, 52),
   new THREE.MeshStandardMaterial({
-    color: 0x1a3a18,
+    color: 0x3a8f40,
     roughness: 1,
     metalness: 0
   })
@@ -182,7 +179,7 @@ const glow = new THREE.Mesh(
   new THREE.PlaneGeometry(2.1, 2.8),
   new THREE.MeshBasicMaterial({
     map: makeGlow(),
-    color: 0xffd2a8,
+    color: 0xffffff,
     transparent: true,
     opacity: 0.55,
     blending: THREE.AdditiveBlending,
@@ -214,8 +211,6 @@ TRACKS.forEach((track, index) => {
 
 const seeds = makeSeeds();
 scene.add(seeds);
-const sparkles = makeSparkles();
-scene.add(sparkles);
 
 layoutCovers(1);
 syncHud();
@@ -227,9 +222,9 @@ function makeGlow() {
   canvas.height = 256;
   const ctx = canvas.getContext("2d");
   const grad = ctx.createRadialGradient(128, 128, 8, 128, 128, 128);
-  grad.addColorStop(0, "rgba(255,230,190,0.95)");
-  grad.addColorStop(0.35, "rgba(255,196,140,0.35)");
-  grad.addColorStop(1, "rgba(255,180,120,0)");
+  grad.addColorStop(0, "rgba(255,255,255,0.95)");
+  grad.addColorStop(0.32, "rgba(230,244,255,0.28)");
+  grad.addColorStop(1, "rgba(200,230,255,0)");
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 256, 256);
   const texture = new THREE.CanvasTexture(canvas);
@@ -260,56 +255,61 @@ function makeCover(track) {
   return texture;
 }
 
+function makeBladeGeometry() {
+  const geometry = new THREE.PlaneGeometry(1, 1, 1, 6);
+  const pos = geometry.attributes.position;
+  for (let i = 0; i < pos.count; i += 1) {
+    const y = pos.getY(i) + 0.5;
+    pos.setX(i, pos.getX(i) * (1 - y * 0.78));
+  }
+  geometry.translate(0, 0.5, 0);
+  geometry.scale(0.018, 0.3, 1);
+  return geometry;
+}
+
 function makeGrass() {
-  const count = reduceMotion ? 4200 : coarse ? 11000 : 28000;
-  const blade = new THREE.PlaneGeometry(0.016, 0.46, 1, 4);
-  blade.translate(0, 0.23, 0);
+  const count = reduceMotion ? 5000 : coarse ? 14000 : 36000;
+  const blade = makeBladeGeometry();
   const material = new THREE.ShaderMaterial({
     side: THREE.DoubleSide,
     fog: false,
     uniforms: {
       uTime: { value: 0 },
       uMotion: { value: reduceMotion ? 0 : 1 },
-      uSunDir: { value: sun.position.clone().normalize() },
-      uSunColor: { value: new THREE.Color(1.0, 0.64, 0.28) },
-      uBase: { value: new THREE.Color(0.06, 0.16, 0.07) },
-      uMid: { value: new THREE.Color(0.14, 0.36, 0.11) },
-      uTip: { value: new THREE.Color(0.96, 0.78, 0.30) },
-      uFog: { value: new THREE.Color(0.52, 0.30, 0.16) }
+      uBase: { value: new THREE.Color(0.18, 0.44, 0.16) },
+      uMid: { value: new THREE.Color(0.34, 0.62, 0.24) },
+      uTip: { value: new THREE.Color(0.52, 0.76, 0.36) }
     },
     vertexShader: `
       uniform float uTime;
       uniform float uMotion;
+      attribute float aShade;
       varying float vH;
-      varying vec3 vWorld;
+      varying float vShade;
       void main() {
         vH = uv.y;
+        vShade = aShade;
         vec3 pos = position;
         vec4 origin = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
-        float wind = sin(uTime * 1.12 + origin.x * 1.7 + origin.z * 1.35);
-        float gust = sin(uTime * 0.28 + origin.x * 0.32 + origin.z * 0.2);
-        pos.x += (wind * 0.13 + gust * 0.09) * pos.y * pos.y * uMotion;
+        float wind = sin(uTime * 1.05 + origin.x * 1.8 + origin.z * 1.4);
+        float gust = sin(uTime * 0.24 + origin.x * 0.28 + origin.z * 0.18);
+        pos.x += (wind * 0.1 + gust * 0.07) * pos.y * pos.y * uMotion;
         vec4 world = modelMatrix * instanceMatrix * vec4(pos, 1.0);
-        vWorld = world.xyz;
         gl_Position = projectionMatrix * viewMatrix * world;
       }
     `,
     fragmentShader: `
-      uniform vec3 uSunDir;
-      uniform vec3 uSunColor;
       uniform vec3 uBase;
       uniform vec3 uMid;
       uniform vec3 uTip;
-      uniform vec3 uFog;
       varying float vH;
-      varying vec3 vWorld;
+      varying float vShade;
       void main() {
-        vec3 col = mix(uBase, uMid, smoothstep(0.08, 0.62, vH));
-        float sunSide = smoothstep(-1.4, 2.2, -vWorld.x + vWorld.y * 0.8);
-        col = mix(col, uTip, smoothstep(0.42, 1.0, vH) * (0.28 + sunSide * 0.72));
-        col += uSunColor * sunSide * vH * 0.22;
-        float fog = smoothstep(5.0, 13.5, length(vWorld.xz));
-        col = mix(col, uFog, fog * 0.62);
+        vec3 col = mix(uBase, uMid, smoothstep(0.05, 0.58, vH));
+        col = mix(col, uTip, smoothstep(0.5, 1.0, vH) * 0.7);
+        float lit = 0.72 + vShade * 0.34;
+        col *= lit;
+        col += vec3(0.12, 0.16, 0.04) * smoothstep(0.65, 1.0, vH);
         gl_FragColor = vec4(col, 1.0);
       }
     `
@@ -320,6 +320,7 @@ function makeGrass() {
   const dummy = new THREE.Object3D();
   const normal = new THREE.Vector3();
   const up = new THREE.Vector3(0, 1, 0);
+  const shades = new Float32Array(count);
   let written = 0;
   let guard = 0;
   while (written < count && guard < count * 8) {
@@ -327,34 +328,34 @@ function makeGrass() {
     const u = Math.random();
     const v = Math.random();
     const theta = u * Math.PI * 2;
-    const phi = Math.acos(1 - v * 0.62);
+    const phi = Math.acos(1 - v * 0.6);
     const x = HILL_R * Math.sin(phi) * Math.cos(theta);
     const y = HILL_R * Math.cos(phi);
     const z = HILL_R * Math.sin(phi) * Math.sin(theta);
-    if (z > 2.8 && Math.random() > 0.35) continue;
+    if (z > 2.6 && Math.random() > 0.4) continue;
     dummy.position.set(x, y * HILL_Y + hill.position.y, z);
     normal.set(x, y / HILL_Y, z).normalize();
     dummy.quaternion.setFromUnitVectors(up, normal);
     dummy.rotateY(Math.random() * Math.PI * 2);
-    dummy.rotateX((Math.random() - 0.5) * 0.35);
-    const h = 0.55 + Math.random() * 0.85;
-    dummy.scale.set(0.7 + Math.random() * 0.7, h, 1);
+    dummy.rotateX((Math.random() - 0.5) * 0.22);
+    const h = 0.7 + Math.random() * 0.45;
+    dummy.scale.set(0.75 + Math.random() * 0.55, h, 1);
     dummy.updateMatrix();
     mesh.setMatrixAt(written, dummy.matrix);
+    shades[written] = 0.75 + Math.random() * 0.35;
     written += 1;
   }
   mesh.count = written;
+  blade.setAttribute("aShade", new THREE.InstancedBufferAttribute(shades.subarray(0, written), 1));
   return mesh;
 }
 
 function makeSpeaker(side) {
   const group = new THREE.Group();
   const white = new THREE.MeshStandardMaterial({
-    color: 0xf7f3ea,
-    roughness: 0.38,
-    metalness: 0.02,
-    emissive: 0x2c2822,
-    emissiveIntensity: 0.12
+    color: 0xf6f3ea,
+    roughness: 0.36,
+    metalness: 0.03
   });
   const black = new THREE.MeshStandardMaterial({
     color: 0x161616,
@@ -418,7 +419,7 @@ function makeSpeaker(side) {
     const ripple = new THREE.Mesh(
       new THREE.RingGeometry(0.16, 0.185, 48),
       new THREE.MeshBasicMaterial({
-        color: 0xffe6c4,
+        color: 0xffffff,
         transparent: true,
         opacity: 0,
         side: THREE.DoubleSide,
@@ -488,27 +489,6 @@ function makeSeedTexture() {
   ctx.fill();
   const texture = new THREE.CanvasTexture(canvas);
   return texture;
-}
-
-function makeSparkles() {
-  const count = coarse ? 80 : 160;
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i += 1) {
-    positions[i * 3] = (Math.random() - 0.5) * 10;
-    positions[i * 3 + 1] = 0.8 + Math.random() * 5.2;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 6;
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  const material = new THREE.PointsMaterial({
-    color: 0xfff4dc,
-    size: 0.035,
-    transparent: true,
-    opacity: 0.75,
-    depthWrite: false,
-    sizeAttenuation: true
-  });
-  return new THREE.Points(geometry, material);
 }
 
 function layoutCovers(immediate) {
@@ -758,8 +738,8 @@ function frame() {
   const level = energy();
 
   if (grass.material.uniforms) grass.material.uniforms.uTime.value = time;
-  glow.material.opacity = 0.42 + (playing ? 0.22 + level * 0.35 : 0);
-  playGlow.intensity = playing ? 0.35 + level * 1.1 : 0.12;
+  glow.material.opacity = 0.28 + (playing ? 0.2 + level * 0.3 : 0);
+  playGlow.intensity = playing ? 0.28 + level * 0.9 : 0.1;
 
   speakers.forEach((speaker) => {
     const pulse = playing ? 1 + level * 0.045 : 1;
@@ -773,8 +753,8 @@ function frame() {
   const px = ((pointer.x / window.innerWidth) - 0.5) * 0.22 * sway;
   const py = ((pointer.y / window.innerHeight) - 0.5) * 0.1 * sway;
   camera.position.x += (px - camera.position.x) * 0.04;
-  camera.position.y += (0.98 - py - camera.position.y) * 0.04;
-  camera.lookAt(0, 0.7, 0);
+  camera.position.y += (0.92 - py - camera.position.y) * 0.04;
+  camera.lookAt(0, 0.68, 0);
 
   seeds.children.forEach((sprite) => {
     const path = sprite.userData.path;
@@ -785,7 +765,6 @@ function frame() {
     );
   });
 
-  sparkles.rotation.y = time * 0.012;
   syncHud();
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
