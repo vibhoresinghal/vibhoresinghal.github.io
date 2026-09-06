@@ -1,9 +1,18 @@
 :root {
-  --creation-paper: #f7f5ef;
-  --creation-ink: #171716;
-  --creation-muted: rgba(23, 23, 22, 0.56);
-  --creation-line: rgba(23, 23, 22, 0.13);
-  --creation-ui: rgba(247, 245, 239, 0.76);
+  --creation-paper: var(--paper);
+  --creation-ink: var(--ink);
+  --creation-muted: var(--muted);
+  --creation-line: var(--line);
+  --creation-ui: color-mix(in srgb, var(--paper) 76%, transparent);
+  --creation-tile: #ece8df;
+  --creation-dot: rgba(80, 74, 63, 0.13);
+  --creation-shadow: 39, 33, 24;
+}
+
+html.is-dark {
+  --creation-tile: #1c1b18;
+  --creation-dot: rgba(236, 233, 225, 0.08);
+  --creation-shadow: 0, 0, 0;
 }
 
 html,
@@ -17,7 +26,14 @@ body.creations-page {
 
 body.creations-page {
   min-width: 0;
+  color: var(--creation-ink);
   touch-action: none;
+}
+
+body.creations-page .theme-toggle {
+  top: max(22px, env(safe-area-inset-top));
+  right: max(22px, env(safe-area-inset-right));
+  z-index: 24;
 }
 
 .creation-shell {
@@ -95,7 +111,7 @@ body.creations-page {
   position: absolute;
   inset: 8px;
   z-index: 30;
-  border: 1px solid rgba(23, 23, 22, 0.32);
+  border: 1px solid color-mix(in srgb, var(--creation-ink) 32%, transparent);
   border-radius: 12px;
   pointer-events: none;
   content: "";
@@ -105,7 +121,7 @@ body.creations-page {
   position: absolute;
   inset: -80px;
   z-index: 0;
-  background-image: radial-gradient(circle, rgba(80, 74, 63, 0.13) 0.7px, transparent 1px);
+  background-image: radial-gradient(circle, var(--creation-dot) 0.7px, transparent 1px);
   background-position: var(--grid-x, 0) var(--grid-y, 0);
   background-size: var(--grid-size, 18px) var(--grid-size, 18px);
   will-change: background-position, background-size;
@@ -156,11 +172,11 @@ body.creations-page {
   height: var(--tile-h);
   flex: 0 0 var(--tile-h);
   overflow: hidden;
-  background: #ece8df;
-  border: 1px solid rgba(23, 23, 22, 0.08);
+  background: var(--creation-tile);
+  border: 1px solid var(--creation-line);
   box-shadow:
-    0 1px 1px rgba(39, 33, 24, 0.08),
-    0 8px 24px rgba(39, 33, 24, calc(0.04 + var(--tile-shadow)));
+    0 1px 1px rgba(var(--creation-shadow), 0.08),
+    0 8px 24px rgba(var(--creation-shadow), calc(0.04 + var(--tile-shadow)));
 }
 
 .creation-tile img {
@@ -196,8 +212,8 @@ body.creations-page {
 .creation-tile:hover .creation-tile-frame,
 .creation-tile:focus-visible .creation-tile-frame {
   box-shadow:
-    0 2px 3px rgba(39, 33, 24, 0.08),
-    0 16px 38px rgba(39, 33, 24, 0.14);
+    0 2px 3px rgba(var(--creation-shadow), 0.08),
+    0 16px 38px rgba(var(--creation-shadow), 0.14);
 }
 
 .creation-tile:hover .creation-tile-label,
@@ -321,7 +337,7 @@ body.creations-page {
 }
 
 .creation-controls button:hover {
-  background: rgba(23, 23, 22, 0.05);
+  background: var(--soft);
 }
 
 .creation-noscript {

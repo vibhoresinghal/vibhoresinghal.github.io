@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f4f1ea">
+  <meta name="theme-color" content="#ece9e1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="An infinite canvas of digital creations by Vibhore Singhal.">
   <script>
@@ -12,6 +12,9 @@
     } catch {
       document.documentElement.classList.add("is-gated");
     }
+    try {
+      if (localStorage.getItem("vs-theme") === "dark") document.documentElement.classList.add("is-dark");
+    } catch {}
   </script>
   <title>Digital creations — Vibhore Singhal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +25,11 @@
 </head>
 <body class="creations-page">
   <a class="skip-link" href="#creation-canvas">Skip to canvas</a>
+  <button type="button" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+    <svg class="theme-toggle-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M10.6 2.4A6 6 0 1 0 13.6 11 4.8 4.8 0 0 1 10.6 2.4Z"/></svg>
+    <svg class="theme-toggle-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.6v1.4M8 13v1.4M1.6 8h1.4M13 8h1.4M3.2 3.2l1 1M11.8 11.8l1 1M3.2 12.8l1-1M11.8 4.2l1-1"/></svg>
+  </button>
+  <div class="theme-veil" aria-hidden="true"></div>
 
   <main class="creation-shell">
     <header class="creation-header">
@@ -71,6 +79,7 @@
   </noscript>
 
   <script src="gate.js"></script>
+  <script src="theme.js"></script>
   <script src="digital-creations.js"></script>
 </body>
 </html>
