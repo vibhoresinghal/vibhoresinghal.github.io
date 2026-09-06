@@ -5,6 +5,8 @@
   --link-ink: #292927;
   --link-line: #c4c4be;
   --line: rgba(22, 22, 22, 0.12);
+  --wash: rgba(244, 241, 234, 0.62);
+  --soft: rgba(22, 22, 22, 0.06);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-hover: cubic-bezier(0.22, 1, 0.36, 1);
   --page-padding: clamp(20px, 4vw, 48px);
@@ -24,6 +26,22 @@
   --dot-fade-end: 0.5;
   --dot-scroll: 0px;
   --dot-page-height: 100vh;
+  --wipe-soft: 16vmin;
+  --ease-wipe: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: light;
+}
+
+html.is-dark {
+  --paper: #141311;
+  --ink: #ece9e1;
+  --muted: #9a968c;
+  --link-ink: #e6e2d8;
+  --link-line: #5a574e;
+  --line: rgba(236, 233, 225, 0.12);
+  --wash: rgba(20, 19, 17, 0.58);
+  --soft: rgba(236, 233, 225, 0.08);
+  --dot-fill: rgba(236, 233, 225, 0.08);
+  color-scheme: dark;
 }
 
 * {
@@ -172,6 +190,124 @@ h3 {
   transform: none;
 }
 
+.theme-toggle {
+  position: fixed;
+  top: 28px;
+  right: var(--page-padding);
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--paper) 48%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  view-transition-name: theme-toggle;
+  transition: color 200ms ease, background 200ms ease, transform 220ms var(--ease-out);
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  transform: scale(1.05);
+}
+
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-toggle-sun {
+  display: none;
+}
+
+html.is-dark .theme-toggle-moon {
+  display: none;
+}
+
+html.is-dark .theme-toggle-sun {
+  display: block;
+}
+
+html.is-viewing .theme-toggle {
+  visibility: hidden;
+}
+
+@property --wipe-r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.theme-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  visibility: hidden;
+  background: var(--paper);
+  --wipe-r: 0px;
+  -webkit-mask-image: radial-gradient(circle at var(--theme-x, 100%) var(--theme-y, 0), #000 0, #000 max(0px, calc(var(--wipe-r) - var(--wipe-soft))), transparent var(--wipe-r));
+  mask-image: radial-gradient(circle at var(--theme-x, 100%) var(--theme-y, 0), #000 0, #000 max(0px, calc(var(--wipe-r) - var(--wipe-soft))), transparent var(--wipe-r));
+  transition: --wipe-r 1.35s var(--ease-wipe);
+}
+
+.theme-veil.is-wiping {
+  visibility: visible;
+  --wipe-r: var(--theme-r);
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+  animation: none;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  -webkit-mask-image: radial-gradient(circle at var(--theme-x) var(--theme-y), #000 0, #000 max(0px, calc(var(--wipe-r) - var(--wipe-soft))), transparent var(--wipe-r));
+  mask-image: radial-gradient(circle at var(--theme-x) var(--theme-y), #000 0, #000 max(0px, calc(var(--wipe-r) - var(--wipe-soft))), transparent var(--wipe-r));
+  animation: theme-wipe 1.35s var(--ease-wipe) both;
+}
+
+::view-transition-group(theme-toggle) {
+  z-index: 3;
+}
+
+@keyframes theme-wipe {
+  from {
+    --wipe-r: 0px;
+  }
+
+  to {
+    --wipe-r: var(--theme-r);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    transition: none;
+  }
+
+  .theme-veil,
+  .theme-veil.is-wiping {
+    transition: none;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 4px;
@@ -253,7 +389,7 @@ h3 {
 .index-rail a span {
   width: 18px;
   flex-shrink: 0;
-  color: rgba(22, 22, 22, 0.32);
+  color: color-mix(in srgb, var(--ink) 32%, transparent);
   font-size: 11px;
 }
 
@@ -705,7 +841,7 @@ a.entry-title {
   padding: 0;
   overflow: hidden;
   color: inherit;
-  background: rgba(22, 22, 22, 0.06);
+  background: var(--soft);
   border: 0;
   border-radius: 6px;
   cursor: zoom-in;
@@ -741,7 +877,7 @@ a.entry-title {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: rgba(244, 241, 234, 0.62);
+  background: var(--wash);
   -webkit-backdrop-filter: blur(7px);
   backdrop-filter: blur(7px);
   content: "";
@@ -917,7 +1053,7 @@ a.entry-title {
   height: 32px;
   padding: 0;
   overflow: hidden;
-  background: rgba(22, 22, 22, 0.06);
+  background: var(--soft);
   border: 1.5px solid transparent;
   border-radius: 4px;
   opacity: 0.55;
@@ -1297,7 +1433,7 @@ html:has(.photo-viewer:not([hidden])) .scroll-blur {
   }
 
   .photo-viewer::before {
-    background: rgba(244, 241, 234, 0.88);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }

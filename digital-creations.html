@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f1ea">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="An infinite canvas of digital creations by Vibhore Singhal.">
+  <script>
+    try {
+      if (sessionStorage.getItem("vs-gate") !== "ok") document.documentElement.classList.add("is-gated");
+    } catch {
+      document.documentElement.classList.add("is-gated");
+    }
+  </script>
+  <title>Digital creations — Vibhore Singhal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Momo+Trust+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="digital-creations.css">
+</head>
+<body class="creations-page">
+  <a class="skip-link" href="#creation-canvas">Skip to canvas</a>
+
+  <main class="creation-shell">
+    <header class="creation-header">
+      <a class="creation-back" href="index.html" aria-label="Back to the index">← Index</a>
+      <div>
+        <p class="creation-kicker">A living field of experiments</p>
+        <h1>Digital creations</h1>
+      </div>
+    </header>
+
+    <section
+      class="creation-canvas"
+      id="creation-canvas"
+      tabindex="0"
+      aria-label="Infinite canvas of digital creations. Drag to move and use the mouse wheel or pinch gesture to zoom."
+    >
+      <div class="creation-grid" aria-hidden="true"></div>
+      <div class="creation-world" aria-live="off"></div>
+      <div class="creation-focus" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <p class="creation-empty" hidden>Move around to discover more.</p>
+    </section>
+
+    <div class="creation-help" aria-hidden="true">
+      <span class="creation-help-desktop">Move to drift · Drag to wander · Scroll to travel</span>
+      <span class="creation-help-touch">Drag to wander · Pinch to zoom</span>
+    </div>
+
+    <div class="creation-status">
+      <output class="creation-count">Preparing canvas…</output>
+      <div class="creation-controls">
+        <button type="button" data-action="zoom-out" aria-label="Zoom out">−</button>
+        <button type="button" data-action="reset" aria-label="Return to the beginning">Home</button>
+        <button type="button" data-action="zoom-in" aria-label="Zoom in">+</button>
+      </div>
+    </div>
+  </main>
+
+  <noscript>
+    <p class="creation-noscript">This canvas needs JavaScript to move.</p>
+  </noscript>
+
+  <script src="gate.js"></script>
+  <script src="digital-creations.js"></script>
+</body>
+</html>
