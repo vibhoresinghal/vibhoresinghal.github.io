@@ -124,7 +124,6 @@ body.creations-page .theme-toggle {
   background-image: radial-gradient(circle, var(--creation-dot) 0.7px, transparent 1px);
   background-position: var(--grid-x, 0) var(--grid-y, 0);
   background-size: var(--grid-size, 18px) var(--grid-size, 18px);
-  will-change: background-position, background-size;
 }
 
 .creation-world {
@@ -174,6 +173,7 @@ body.creations-page .theme-toggle {
   overflow: hidden;
   background: var(--creation-tile);
   border: 1px solid var(--creation-line);
+  border-radius: 5px;
   box-shadow:
     0 1px 1px rgba(var(--creation-shadow), 0.08),
     0 8px 24px rgba(var(--creation-shadow), calc(0.04 + var(--tile-shadow)));
@@ -185,6 +185,7 @@ body.creations-page .theme-toggle {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  border-radius: inherit;
 }
 
 .creation-tile-label {
@@ -269,7 +270,6 @@ body.creations-page .theme-toggle {
   --edge-blur: 15px;
   --edge-mask: radial-gradient(circle at 50% 48%, transparent 0 82%, #000 94%, #000 100%);
   opacity: var(--edge-energy, 0.72);
-  will-change: opacity;
 }
 
 .creations-page.is-lightweight .creation-focus span:nth-child(6) {
