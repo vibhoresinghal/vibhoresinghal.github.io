@@ -705,12 +705,12 @@
         }, dwell);
       };
 
-      const activate = (item) => {
+      const activate = (item, forced = false) => {
         window.clearTimeout(leaveTimer);
         window.clearTimeout(enterTimer);
         pending = null;
         if (current === item || flipping) return;
-        if (itemFromPoint() !== item) return;
+        if (!forced && itemFromPoint() !== item) return;
         fadeBody(bodyOf(current), false);
         flipping = true;
         layout(list, () => {
@@ -719,6 +719,7 @@
           current = item;
         }, () => {
           flipping = false;
+          if (forced) return;
           const still = itemFromPoint();
           if (still === current) return;
           if (still) schedule(still);
@@ -802,11 +803,15 @@
         items.forEach((item) => {
           item.addEventListener("click", (event) => {
             if (event.target.closest("a[href], .gallery-shot")) return;
+            event.preventDefault();
             if (item.classList.contains("is-hot")) {
               clear();
               return;
             }
-            activate(item);
+            activate(item, true);
+          });
+          item.addEventListener("selectstart", (event) => {
+            if (!event.target.closest(".entry-body, .job-detail")) event.preventDefault();
           });
         });
       }
