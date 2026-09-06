@@ -6,8 +6,8 @@
   const count = document.querySelector(".creation-count");
   if (!canvas || !world || !grid || !focusLayer) return;
 
-  const CELL_X = 248;
-  const CELL_Y = 198;
+  const CELL_X = 236;
+  const CELL_Y = 248;
   const OVERSCAN = 820;
   const MIN_SCALE = 0.46;
   const MAX_SCALE = 1.75;
@@ -48,38 +48,55 @@
   };
 
   const tilePhotos = [
-    { src: "images/hobbies/virtus-lean.jpg", label: "Veronica" },
-    { src: "images/hobbies/virtus-front.jpg", label: "Virtus" },
-    { src: "images/hobbies/virtus-wash.jpg", label: "Wash day" },
-    { src: "images/hobbies/virtus-street.jpg", label: "Street park" },
-    { src: "images/hobbies/sport-gym.jpg", label: "Gym" },
-    { src: "images/hobbies/sport-tennis.jpg", label: "Tennis" },
-    { src: "images/hobbies/sport-basketball.jpg", label: "Basketball" },
-    { src: "images/hobbies/cook-vegetables.jpg", label: "Cooking" },
-    { src: "images/hobbies/cook-sandwich.jpg", label: "Tawa" },
-    { src: "images/workspaces/desk.jpg", label: "Bangalore desk" },
-    { src: "images/workspaces/desk-detail.jpg", label: "Desk" },
-    { src: "images/workspaces/monitor.jpg", label: "Night desk" },
-    { src: "images/workspaces/camera.jpg", label: "X-S20" },
-    { src: "images/workspaces/camera-field.jpg", label: "In the field" },
-    { src: "images/workspaces/edit.jpg", label: "Edit corner" },
-    { src: "images/workspaces/edit-detail.jpg", label: "Resolve" },
-    { src: "images/workspaces/bag.jpg", label: "Bag" },
-    { src: "images/bts/xs20-hands.jpg", label: "Learning the X-S20" },
-    { src: "images/bts/xs20-tripod.jpg", label: "Tripod" },
-    { src: "images/bts/filming-smoke.jpg", label: "Smoke" },
-    { src: "images/bts/filming-set.jpg", label: "Set" },
-    { src: "images/bts/filming-room.jpg", label: "Room" },
-    { src: "images/bts/filming-camera.jpg", label: "On sticks" },
-    { src: "images/bts/notes.jpg", label: "Notes" },
-    { src: "images/bts/camera.jpg", label: "Camera" },
-    { src: "images/films/sakleshpur.jpg", label: "Sakleshpur" },
-    { src: "images/films/delhi.jpg", label: "Delhi" },
-    { src: "images/films/ladakh.jpg", label: "Ladakh" },
-    { src: "images/work/neo.jpg", label: "Neo" },
-    { src: "images/work/payzapp.jpg", label: "PayZapp" },
-    { src: "images/work/growth.jpg", label: "Growth" },
-    { src: "images/work/unicorn.jpg", label: "Unicorn" }
+    { src: "images/creations/a.jpg", label: "A" },
+    { src: "images/creations/b.jpg", label: "B" },
+    { src: "images/creations/c.jpg", label: "C" },
+    { src: "images/creations/d.jpg", label: "D" },
+    { src: "images/creations/e.jpg", label: "E" },
+    { src: "images/creations/f.jpg", label: "F" },
+    { src: "images/creations/g.jpg", label: "G" },
+    { src: "images/creations/h.jpg", label: "H" },
+    { src: "images/creations/i.jpg", label: "I" },
+    { src: "images/creations/j.jpg", label: "J" },
+    { src: "images/creations/k.jpg", label: "K" },
+    { src: "images/creations/l.jpg", label: "L" },
+    { src: "images/creations/m.jpg", label: "M" },
+    { src: "images/creations/n.jpg", label: "N" },
+    { src: "images/creations/o.jpg", label: "O" },
+    { src: "images/creations/p.jpg", label: "P" },
+    { src: "images/creations/q.jpg", label: "Q" },
+    { src: "images/creations/r.jpg", label: "R" },
+    { src: "images/creations/s.jpg", label: "S" },
+    { src: "images/creations/t.jpg", label: "T" },
+    { src: "images/creations/u.jpg", label: "U" },
+    { src: "images/creations/v.jpg", label: "V" },
+    { src: "images/creations/w.jpg", label: "W" },
+    { src: "images/creations/x.jpg", label: "X" },
+    { src: "images/creations/y.jpg", label: "Y" },
+    { src: "images/creations/z.jpg", label: "Z" },
+    { src: "images/creations/basketball.jpg", label: "Basketball" },
+    { src: "images/creations/football.jpg", label: "Football" },
+    { src: "images/creations/lawn-tennis.jpg", label: "Lawn Tennis" },
+    { src: "images/creations/cricket.jpg", label: "Cricket" },
+    { src: "images/creations/badminton.jpg", label: "Badminton" },
+    { src: "images/creations/boxing.jpg", label: "Boxing" },
+    { src: "images/creations/volleyball.jpg", label: "Volleyball" },
+    { src: "images/creations/swimming.jpg", label: "Swimming" },
+    { src: "images/creations/track.jpg", label: "Track" },
+    { src: "images/creations/firefighter.jpg", label: "Firefighter" },
+    { src: "images/creations/singer.jpg", label: "Singer" },
+    { src: "images/creations/intelligent-car.jpg", label: "Intelligent car" },
+    { src: "images/creations/iso.jpg", label: "Iso" },
+    { src: "images/creations/img-0112.jpg", label: "Flamingo" },
+    { src: "images/creations/windmill.jpg", label: "Windmill" },
+    { src: "images/creations/doggo-1.jpg", label: "Doggo" },
+    { src: "images/creations/first-grain.jpg", label: "First grain" },
+    { src: "images/creations/skateboard.jpg", label: "Skateboard" },
+    { src: "images/creations/calavera.jpg", label: "Calavera" },
+    { src: "images/creations/day-of-the-dead.jpg", label: "Day of the Dead" },
+    { src: "images/creations/caged-heart.jpg", label: "Caged heart" },
+    { src: "images/creations/gold-ball.jpg", label: "Gold ball" },
+    { src: "images/creations/lowpoly-rose.jpg", label: "Rose" }
   ];
 
   tilePhotos.forEach((photo) => {
@@ -90,8 +107,8 @@
 
   const tileData = (cellX, cellY) => {
     const seed = hash(cellX, cellY);
-    const tileWidth = 132;
-    const tileHeight = 104;
+    const tileWidth = 148;
+    const tileHeight = 148;
     return {
       key: `${cellX}:${cellY}`,
       x: cellX * CELL_X - tileWidth * 0.5,
