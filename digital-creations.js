@@ -13,6 +13,8 @@
   const MAX_SCALE = 1.75;
   const MAX_TILES = 720;
   const active = new Map();
+  const tilePool = [];
+  const styleCache = new WeakMap();
   const pointers = new Map();
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -37,6 +39,7 @@
   let statusTime = 0;
   let slowSamples = 0;
   let focusFrame = 0;
+  let frameId = null;
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const mix = (a, b, amount) => a + (b - a) * amount;
@@ -99,11 +102,89 @@
     { src: "images/creations/lowpoly-rose.jpg", label: "Rose" }
   ];
 
-  tilePhotos.forEach((photo) => {
-    const image = new Image();
-    image.decoding = "async";
-    image.src = photo.src;
-  });
+  const requestedPhotos = new Set();
+  const readyPhotos = new Set();
+  let prefetchQueue = [];
+  let prefetchTimer = null;
+  let prefetching = 0;
+
+  const setStyle = (element, property, value) => {
+    let cache = styleCache.get(element);
+    if (!cache) {
+      cache = new Map();
+      styleCache.set(element, cache);
+    }
+    if (cache.get(property) === value) return;
+    cache.set(property, value);
+    element.style.setProperty(property, value);
+  };
+
+  const showPhoto = (tile, priority) => {
+    const src = tilePhotos[tile._creationData.image].src;
+    const image = tile._image;
+    if (image.fetchPriority !== priority) image.fetchPriority = priority;
+    if (image.getAttribute("src") !== src) image.src = src;
+    requestedPhotos.add(src);
+  };
+
+  // Include enlarged cards and their shadows before they reach the viewport.
+  const isNearViewport = (data) => {
+    const x = camera.x + (data.x + data.width / 2) * camera.scale;
+    const y = camera.y + (data.y + data.height / 2) * camera.scale;
+    const margin = 160 * camera.scale + 120;
+    return x >= -margin && x <= width + margin && y >= -margin && y <= height + margin;
+  };
+
+  const schedulePrefetch = () => {
+    if (prefetchTimer !== null || prefetching >= 2 || !prefetchQueue.length) return;
+    prefetchTimer = window.setTimeout(() => {
+      prefetchTimer = null;
+      while (prefetching < 2 && prefetchQueue.length) {
+        const src = prefetchQueue.shift();
+        if (requestedPhotos.has(src)) continue;
+        requestedPhotos.add(src);
+        prefetching += 1;
+        const image = new Image();
+        image.decoding = "async";
+        image.fetchPriority = "low";
+        const finish = (loaded) => {
+          image.onload = image.onerror = null;
+          prefetching -= 1;
+          if (loaded) {
+            readyPhotos.add(src);
+            active.forEach((tile) => {
+              if (tilePhotos[tile._creationData.image].src === src) showPhoto(tile, "low");
+            });
+          } else {
+            requestedPhotos.delete(src);
+          }
+          schedulePrefetch();
+        };
+        image.onload = () => finish(true);
+        image.onerror = () => finish(false);
+        image.src = src;
+      }
+    }, 150);
+  };
+
+  const prioritizePhotos = () => {
+    const nearby = new Map();
+    active.forEach((tile) => {
+      const data = tile._creationData;
+      const src = tilePhotos[data.image].src;
+      if (isNearViewport(data)) {
+        showPhoto(tile, "high");
+      } else if (readyPhotos.has(src)) {
+        showPhoto(tile, "low");
+      } else if (!requestedPhotos.has(src)) {
+        const dx = camera.x + (data.x + data.width / 2) * camera.scale - width / 2;
+        const dy = camera.y + (data.y + data.height / 2) * camera.scale - height / 2;
+        nearby.set(src, Math.min(nearby.get(src) ?? Infinity, dx * dx + dy * dy));
+      }
+    });
+    prefetchQueue = [...nearby].sort((a, b) => a[1] - b[1]).map(([src]) => src);
+    schedulePrefetch();
+  };
 
   const tileData = (cellX, cellY) => {
     const seed = hash(cellX, cellY);
@@ -149,18 +230,36 @@
   };
 
   const applyFocus = (tile, focus) => {
-    tile.style.setProperty("--focus-scale", focus.scale.toFixed(3));
-    tile.style.setProperty("--focus-opacity", focus.opacity.toFixed(3));
-    tile.style.setProperty("--focus-x", `${focus.x.toFixed(2)}px`);
-    tile.style.setProperty("--focus-y", `${focus.y.toFixed(2)}px`);
-    tile.style.zIndex = String(focus.zIndex);
-    tile.classList.toggle("is-captioned", focus.scale > 1.45);
+    setStyle(tile, "--focus-scale", focus.scale.toFixed(3));
+    setStyle(tile, "--focus-opacity", focus.opacity.toFixed(3));
+    setStyle(tile, "--focus-x", `${focus.x.toFixed(2)}px`);
+    setStyle(tile, "--focus-y", `${focus.y.toFixed(2)}px`);
+    setStyle(tile, "z-index", String(focus.zIndex));
+    const captioned = focus.scale > 1.45;
+    if (tile._captioned !== captioned) {
+      tile.classList.toggle("is-captioned", captioned);
+      tile._captioned = captioned;
+    }
   };
 
   const makeTile = (data) => {
-    const tile = document.createElement("button");
-    tile.type = "button";
-    tile.className = "creation-tile";
+    const tile = tilePool.pop() || document.createElement("button");
+    if (!tile._image) {
+      tile.type = "button";
+      tile.className = "creation-tile";
+      tile.innerHTML = `
+        <span class="creation-tile-frame">
+          <img alt="" draggable="false" decoding="async">
+        </span>
+        <span class="creation-tile-label"></span>
+      `;
+      tile._image = tile.querySelector("img");
+      tile._label = tile.querySelector(".creation-tile-label");
+      tile._image.addEventListener("load", () => {
+        const src = tile._image.getAttribute("src");
+        if (src) readyPhotos.add(src);
+      });
+    }
     tile.dataset.key = data.key;
     tile.setAttribute("aria-label", tilePhotos[data.image].label);
     tile.style.setProperty("--tile-x", `${data.x}px`);
@@ -172,20 +271,18 @@
     tile._creationData = data;
     const focus = focusFor(data);
     applyFocus(tile, focus);
-    tile.innerHTML = `
-      <span class="creation-tile-frame">
-        <img src="${tilePhotos[data.image].src}" alt="" draggable="false" decoding="async">
-      </span>
-      <span class="creation-tile-label">${tilePhotos[data.image].label}</span>
-    `;
+    tile._label.textContent = tilePhotos[data.image].label;
     return tile;
   };
 
-  const visibleRange = () => {
-    const minX = (-camera.x - OVERSCAN) / camera.scale;
-    const maxX = (width - camera.x + OVERSCAN) / camera.scale;
-    const minY = (-camera.y - OVERSCAN) / camera.scale;
-    const maxY = (height - camera.y + OVERSCAN) / camera.scale;
+  const visibleRange = (fullBuffer = false) => {
+    const base = fullBuffer ? OVERSCAN : 360;
+    const leadX = fullBuffer ? 0 : clamp(motion.x * 24, -460, 460);
+    const leadY = fullBuffer ? 0 : clamp(motion.y * 24, -460, 460);
+    const minX = (-camera.x - base - Math.max(0, leadX)) / camera.scale;
+    const maxX = (width - camera.x + base + Math.max(0, -leadX)) / camera.scale;
+    const minY = (-camera.y - base - Math.max(0, leadY)) / camera.scale;
+    const maxY = (height - camera.y + base + Math.max(0, -leadY)) / camera.scale;
     return {
       left: Math.floor(minX / CELL_X),
       right: Math.ceil(maxX / CELL_X),
@@ -196,9 +293,11 @@
 
   const reconcileTiles = (force = false) => {
     const range = visibleRange();
+    // Keep the original density thresholds even though fewer offscreen tiles mount.
+    const densityRange = visibleRange(true);
     let stride = camera.scale < 0.55 ? 2 : 1;
-    const columns = range.right - range.left + 1;
-    const rows = range.bottom - range.top + 1;
+    const columns = densityRange.right - densityRange.left + 1;
+    const rows = densityRange.bottom - densityRange.top + 1;
     while (Math.ceil(columns / stride) * Math.ceil(rows / stride) > MAX_TILES) stride += 1;
     const rangeKey = `${range.left}:${range.right}:${range.top}:${range.bottom}:${stride}`;
     if (!force && rangeKey === lastRange) return;
@@ -217,35 +316,41 @@
         wanted.add(key);
         if (!active.has(key)) {
           const data = tileData(x, y);
-          const tile = makeTile(data);
-          active.set(key, tile);
-          additions.push(tile);
+          additions.push(data);
         }
       }
     }
 
     active.forEach((tile, key) => {
       if (wanted.has(key)) return;
+      if (tile === document.activeElement) return;
       tile.remove();
       active.delete(key);
+      tile._image.removeAttribute("src");
+      if (tilePool.length < 128) tilePool.push(tile);
     });
 
     if (additions.length) {
       const fragment = document.createDocumentFragment();
-      additions.forEach((tile) => fragment.append(tile));
+      additions.forEach((data) => {
+        const tile = makeTile(data);
+        active.set(data.key, tile);
+        fragment.append(tile);
+      });
       world.append(fragment);
     }
+    prioritizePhotos();
   };
 
   const applyCamera = () => {
-    world.style.setProperty("--camera-x", `${camera.x.toFixed(2)}px`);
-    world.style.setProperty("--camera-y", `${camera.y.toFixed(2)}px`);
-    world.style.setProperty("--camera-scale", camera.scale.toFixed(4));
-    focusLayer.style.setProperty("--edge-energy", (0.72 + motion.blur / 7.5 * 0.28).toFixed(3));
+    setStyle(world, "--camera-x", `${camera.x.toFixed(2)}px`);
+    setStyle(world, "--camera-y", `${camera.y.toFixed(2)}px`);
+    setStyle(world, "--camera-scale", camera.scale.toFixed(4));
+    setStyle(focusLayer, "--edge-energy", (0.72 + motion.blur / 7.5 * 0.28).toFixed(3));
     const gridSize = 18 * camera.scale;
-    grid.style.setProperty("--grid-size", `${gridSize.toFixed(2)}px`);
-    grid.style.setProperty("--grid-x", `${(camera.x % gridSize).toFixed(2)}px`);
-    grid.style.setProperty("--grid-y", `${(camera.y % gridSize).toFixed(2)}px`);
+    setStyle(grid, "--grid-size", `${gridSize.toFixed(2)}px`);
+    setStyle(grid, "--grid-x", `${(camera.x % gridSize).toFixed(2)}px`);
+    setStyle(grid, "--grid-y", `${(camera.y % gridSize).toFixed(2)}px`);
   };
 
   const updateFocusDepth = () => {
@@ -253,10 +358,11 @@
       const data = tile._creationData;
       if (!data) return;
       applyFocus(tile, focusFor(data));
+      if (isNearViewport(data)) showPhoto(tile, "high");
     });
   };
 
-  const updateStatus = (now) => {
+  const updateStatus = (now, force = false) => {
     fpsFrames += 1;
     if (now - fpsTime >= 500) {
       fps = Math.round((fpsFrames * 1000) / (now - fpsTime));
@@ -269,10 +375,19 @@
         document.body.classList.add("is-lightweight");
       }
     }
-    if (now - statusTime > 300) {
+    if (count && (force || now - statusTime > 300)) {
       statusTime = now;
       count.textContent = `${active.size} nearby · ${Math.round(camera.scale * 100)}% · ${fps} fps`;
     }
+  };
+
+  const wake = () => {
+    if (frameId !== null || document.hidden) return;
+    lastTime = performance.now();
+    fpsTime = lastTime;
+    fpsFrames = 0;
+    slowSamples = 0;
+    frameId = requestAnimationFrame(frame);
   };
 
   const frame = (now) => {
@@ -312,12 +427,24 @@
     const blurLimit = document.body.classList.contains("is-lightweight") ? 4 : 7.5;
     const blurTarget = reduceMotion ? 0 : clamp((motion.speed - 0.35) * 0.16, 0, blurLimit);
     motion.blur = mix(motion.blur, blurTarget, blurTarget > motion.blur ? 0.24 : 0.1);
+    const drifting = !dragging && !pinch && steer.active && !reduceMotion && (steer.x !== 0 || steer.y !== 0);
+    const coasting = !dragging && !pinch && (inertia.x !== 0 || inertia.y !== 0);
+    const settled = !drifting && !coasting
+      && Math.abs(target.x - camera.x) < 0.005
+      && Math.abs(target.y - camera.y) < 0.005
+      && Math.abs(target.scale - camera.scale) < 0.000001
+      && motion.speed < 0.005 && motion.blur < 0.001;
+    if (settled) {
+      Object.assign(camera, target);
+      motion.x = motion.y = motion.speed = motion.blur = 0;
+    }
     applyCamera();
     reconcileTiles();
     focusFrame = (focusFrame + 1) % 3;
-    if (focusFrame === 0) updateFocusDepth();
-    updateStatus(now);
-    requestAnimationFrame(frame);
+    if (focusFrame === 0 || settled) updateFocusDepth();
+    // Retain the last measured FPS while idle; idle time is not a slow frame.
+    updateStatus(now, settled);
+    frameId = settled ? null : requestAnimationFrame(frame);
   };
 
   const midpoint = (points) => ({
@@ -355,6 +482,7 @@
 
   canvas.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 && event.pointerType === "mouse") return;
+    wake();
     canvas.setPointerCapture(event.pointerId);
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     inertia.x = 0;
@@ -373,6 +501,7 @@
   });
 
   canvas.addEventListener("pointermove", (event) => {
+    wake();
     if (event.pointerType === "mouse" && pointers.size === 0) {
       updateSteer(event.clientX, event.clientY);
       return;
@@ -409,6 +538,7 @@
   });
 
   const endPointer = (event) => {
+    wake();
     pointers.delete(event.pointerId);
     if (pointers.size === 1) {
       const point = [...pointers.values()][0];
@@ -430,9 +560,11 @@
   canvas.addEventListener("pointercancel", endPointer);
   canvas.addEventListener("pointerleave", () => {
     if (!dragging) steer.active = false;
+    wake();
   });
 
   const zoomAt = (screenX, screenY, nextScale) => {
+    wake();
     const scale = clamp(nextScale, MIN_SCALE, MAX_SCALE);
     const worldX = (screenX - target.x) / target.scale;
     const worldY = (screenY - target.y) / target.scale;
@@ -442,6 +574,7 @@
   };
 
   canvas.addEventListener("wheel", (event) => {
+    wake();
     event.preventDefault();
     inertia.x = 0;
     inertia.y = 0;
@@ -469,6 +602,7 @@
   });
 
   canvas.addEventListener("keydown", (event) => {
+    wake();
     const distance = event.shiftKey ? 240 : 90;
     const moves = {
       ArrowLeft: [distance, 0],
@@ -499,6 +633,7 @@
   });
 
   document.querySelector("[data-action='reset']")?.addEventListener("click", () => {
+    wake();
     Object.assign(target, home);
     inertia.x = 0;
     inertia.y = 0;
@@ -519,9 +654,20 @@
     home.y = height * 0.5;
     lastRange = "";
     reconcileTiles(true);
+    updateFocusDepth();
+    wake();
   }, { passive: true });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (frameId !== null) cancelAnimationFrame(frameId);
+      frameId = null;
+    } else {
+      wake();
+    }
+  });
 
   reconcileTiles(true);
   applyCamera();
-  requestAnimationFrame(frame);
+  wake();
 })();
