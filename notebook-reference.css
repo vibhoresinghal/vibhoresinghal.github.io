@@ -1,0 +1,217 @@
+/* ---------------- sketchbook ---------------- */
+.hero,.hero *{-webkit-user-select:none;-moz-user-select:none;user-select:none}
+.hero img{-webkit-user-drag:none;user-drag:none}
+.sb-wrap{display:grid;justify-items:center;gap:20px;width:100%;position:relative;z-index:2}
+.sb-stage{
+  display:flex;align-items:center;justify-content:center;width:100%;
+  position:relative;
+  touch-action:pan-y;
+}
+.sb-arrow{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;padding:6px 2px;
+  border:0;background:transparent;color:var(--ink-faint);cursor:pointer;transition:color .2s;
+  -webkit-tap-highlight-color:transparent;z-index:8;
+}
+.sb-arrow:hover{color:var(--ink)}
+
+/* The box is the book's own untransformed frame: the loupe lives here, on
+   the desk, while only .sb-tilt leans and scales underneath it. */
+.sb-3d{
+  position:relative;flex:1 1;min-width:0;max-width:900px;
+  perspective:1750px;perspective-origin:50% 46%;
+}
+.sb-tilt{
+  position:relative;
+  transform-style:preserve-3d;
+  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--zoom,1));
+  will-change:transform;
+}
+.sb-book{position:relative;width:100%;aspect-ratio:1760/1240;transform-style:preserve-3d;z-index:1}
+
+/* The book sits on a surface, so its shadow is a soft pool underneath —
+   no box, no filter on the artwork, nothing with an edge of its own.
+   Both blobs fade to zero well inside their own bounds, and both ease
+   off while a leaf is in the air. */
+.sb-cast{position:absolute;pointer-events:none;z-index:0}
+.sb-cast.ambient{
+  left:5%;right:5%;top:27%;bottom:2%;
+  background:radial-gradient(50% 50% at 50% 58%,
+    rgba(58,44,26,.34) 0%,rgba(58,44,26,.19) 40%,rgba(58,44,26,0) 74%);
+  filter:blur(26px);
+  opacity:calc(1 - var(--shade,0) * .42);
+}
+.sb-cast.contact{
+  left:9%;right:9%;top:62%;bottom:10%;
+  background:radial-gradient(50% 44% at 50% 42%,
+    rgba(44,32,14,.40) 0%,rgba(44,32,14,.17) 48%,rgba(44,32,14,0) 78%);
+  filter:blur(11px);
+  opacity:calc(1 - var(--shade,0) * .5);
+}
+.sb-cast.hair{
+  left:12%;right:12%;top:70%;bottom:17%;
+  background:radial-gradient(50% 52% at 50% 40%,
+    rgba(40,28,10,.34) 0%,rgba(40,28,10,0) 76%);
+  filter:blur(4px);
+  opacity:calc(1 - var(--shade,0) * .62);
+}
+.sb-full{position:absolute;inset:0}
+.sb-full img{width:100%;height:auto;display:block}
+.sb-half{position:absolute;top:0;bottom:0;width:50%;overflow-x:clip;overflow-y:visible}
+.sb-half.left{left:0}
+.sb-half.right{left:50%}
+.sb-half-img{width:200%;max-width:none;height:auto;display:block}
+.sb-half-img.right{margin-left:-100%}
+/* the shadow the lifting leaf throws onto the page beneath it */
+.gutter-shade{
+  position:absolute;top:var(--pg,21.8%);bottom:var(--pg,21.8%);width:46%;
+  pointer-events:none;opacity:calc(var(--shade,0) * .62);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 5.2%,#000 94.8%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0,#000 5.2%,#000 94.8%,transparent 100%);
+}
+.gutter-shade.left{right:0;background:linear-gradient(270deg,rgba(52,38,20,.30),rgba(52,38,20,0) 82%)}
+.gutter-shade.right{left:0;background:linear-gradient(90deg,rgba(52,38,20,.24),rgba(52,38,20,0) 82%)}
+
+/* ---- the turning leaf: nested strips forming a curved surface ---- */
+.curl{
+  position:absolute;top:0;height:100%;
+  width:calc(var(--bw,0px) * var(--span));
+  transform-style:preserve-3d;z-index:6;
+}
+.curl.next{left:50%;transform-origin:left center;transform:rotateY(calc(-1 * var(--tt,0deg)))}
+.curl.prev{right:50%;transform-origin:right center;transform:rotateY(var(--tt,0deg))}
+.strip{
+  position:absolute;top:0;height:100%;
+  width:calc(var(--bw,0px) * var(--span) / var(--n));
+  transform-style:preserve-3d;
+}
+.curl.next .strip{transform-origin:left center}
+.curl.prev .strip{transform-origin:right center}
+.curl.next>.strip{left:0}
+.curl.prev>.strip{right:0;left:auto}
+.curl.next .strip .strip{left:100%;transform:rotateY(var(--td,0deg))}
+.curl.prev .strip .strip{right:100%;transform:rotateY(calc(-1 * var(--td,0deg)))}
+.face{
+  position:absolute;top:0;bottom:0;left:0;right:-1.1px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background-repeat:no-repeat;background-size:var(--bw,0px) auto;
+}
+.face.back{transform:rotateY(180deg)}
+.face .sh,.face .gl{
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 5.2%,#000 94.8%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0,#000 5.2%,#000 94.8%,transparent 100%);
+}
+.strip.edge .face .sh,.strip.edge .face .gl{
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 91%,transparent 100%),var(--hf);
+  mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 91%,transparent 100%),var(--hf);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+.curl.next .strip.edge .face.front,.curl.prev .strip.edge .face.back{
+  --hf:linear-gradient(90deg,#000 0 22%,transparent 96%);
+}
+.curl.next .strip.edge .face.back,.curl.prev .strip.edge .face.front{
+  --hf:linear-gradient(270deg,#000 0 22%,transparent 96%);
+}
+.face .sh{position:absolute;left:0;right:0;top:var(--pg,21.8%);bottom:var(--pg,21.8%);pointer-events:none}
+.curl.next .face.front .sh,.curl.prev .face.back .sh{
+  background:linear-gradient(90deg,rgba(58,43,20,var(--a1,0)),rgba(58,43,20,var(--a2,0)));
+}
+.curl.next .face.back .sh,.curl.prev .face.front .sh{
+  background:linear-gradient(90deg,rgba(58,43,20,var(--a2,0)),rgba(58,43,20,var(--a1,0)));
+}
+.face .gl{
+  position:absolute;left:0;right:0;top:var(--pg,21.8%);bottom:var(--pg,21.8%);
+  pointer-events:none;background:#fffaf0;
+  opacity:calc(var(--shade,0) * var(--lit,1) * var(--lit,1) * .20);
+}
+
+.sb-zone{position:absolute;top:0;bottom:0;border:0;background:transparent;cursor:grab;z-index:60;-webkit-tap-highlight-color:transparent}
+.sb-zone:active{cursor:grabbing}
+.sb-prev{left:0;width:50%}
+.sb-next{right:0;width:50%}
+
+.sb-captions{display:grid;justify-items:center}
+.sb-captions>*{grid-area:1/1;margin:0}
+.sb-caption{font-size:13px;letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--ink-soft);
+  animation:sb-cap-in .5s ease both}
+.sb-caption.live{animation:none}
+@keyframes sb-cap-in{0%{opacity:0}}
+@keyframes sb-cap-out{to{opacity:0}}
+.sb-hint{
+  margin:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+  transition:opacity .4s ease;
+}
+.sb-hint.gone{opacity:0}
+.sb-wrap.intro .sb-full img,.sb-wrap.intro .sb-half-img{filter:url(#sb-mblur-1)}
+.sb-wrap.intro.b2 .sb-full img,.sb-wrap.intro.b2 .sb-half-img{filter:url(#sb-mblur-2)}
+.sb-wrap.intro .sb-caption{animation:none}
+.sb-wrap.intro .sb-caption.cap-out{display:none}
+@media (max-width:640px){
+  .hero-kicker{font-size:10.5px;letter-spacing:.16em}
+  .sb-wrap{width:100vw;margin-inline:calc(50% - 50vw)}
+  .sb-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:70;padding:12px 6px}
+  .sb-arrow.left{left:2px}
+  .sb-arrow.right{right:2px}
+  .sb-3d{max-width:none}
+  .sb-hint{font-size:9.5px;letter-spacing:.1em;padding:0 16px;text-align:center}
+}
+
+
+/* Portfolio integration; two taller A5 leaves, no desk accessories. */
+.notebook-page .sb-wrap { --ink:var(--notebook-ink); --ink-soft:var(--notebook-soft); --ink-faint:var(--notebook-soft); --track-caps:.12em; --pg:5%; display:flex; flex:1; flex-direction:column; align-items:center; gap:0; min-height:0; width:100%; margin:0; padding-top:12px; }
+.notebook-page .sb-stage { display:grid; place-items:center; flex:1; min-height:0; width:100%; perspective:1750px; }
+.notebook-page .sb-3d { flex:none; height:min(100%,calc((100vw - 56px)*.70455)); aspect-ratio:1760/1240; width:auto; max-width:100%; }
+.notebook-page .sb-book { width:100%; max-width:none; aspect-ratio:1760/1240; }
+.notebook-page .sb-tilt { height:100%; }
+.notebook-page .sb-cast.ambient { top:32%; bottom:-12%; }
+.notebook-page .sb-cast.contact { top:83%; bottom:-5%; }
+.notebook-page .sb-cast.hair { top:91%; bottom:-1%; }
+.notebook-page .notebook-navigation { margin-top:9px; }
+.notebook-navigation .sb-arrow { position:static; transform:none; display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid var(--notebook-line); border-radius:50%; color:var(--notebook-ink); font:18px "DM Sans",sans-serif; }
+.notebook-page .sb-caption { font:20px/1.2 "Instrument Serif",Georgia,serif; letter-spacing:0; text-transform:none; color:var(--notebook-ink); }
+.notebook-page .sb-hint { height:0; overflow:hidden; margin:0; }
+@media(max-height:420px) { .notebook-page .sb-wrap { display:flex; } .notebook-page .notebook-navigation { width:min(100%,400px); grid-template-columns:30px 1fr 30px; } }
+
+/* Closed covers remain centred while the spread opens out onto the desk. */
+.notebook-page .sb-3d { transition:transform 650ms cubic-bezier(.35,.05,.2,1); }
+.notebook-page .sb-wrap[data-cover="front"] .sb-3d { transform:translateX(-22.45%); }
+.notebook-page .sb-wrap[data-cover="back"] .sb-3d { transform:translateX(22.45%); }
+.notebook-page .sb-wrap[data-cover="front"] .sb-cast { left:50%; right:3%; }
+.notebook-page .sb-wrap[data-cover="back"] .sb-cast { left:3%; right:50%; }
+.notebook-page .sb-arrow:disabled { opacity:.25; cursor:default; }
+.notebook-page .sb-zone:disabled { pointer-events:none; }
+.notebook-page .notebook-pagination button:first-child::after,
+.notebook-page .notebook-pagination button:last-child::after { width:5px; height:5px; border-radius:1px; }
+@media(prefers-reduced-motion:reduce) { .notebook-page .sb-3d { transition:none; } }
+
+/* Shared index visual language for the UI, not the physical book. */
+body.notebook-page,
+html.is-dark body.notebook-page {
+  --notebook-bg:var(--paper);
+  --notebook-ink:var(--ink);
+  --notebook-soft:var(--muted);
+  --notebook-line:var(--line);
+  --notebook-accent:var(--ink);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+}
+main.notebook-shell { position:relative; z-index:1; padding-inline:var(--page-padding); }
+.notebook-header { border-color:var(--line); }
+.notebook-index { display:flex; align-items:center; gap:24px; min-width:0; }
+.notebook-index a { display:inline-flex; align-items:center; gap:8px; padding:10px 0; color:var(--muted); font-size:13px; white-space:nowrap; transition:color 200ms ease; }
+.notebook-index-number { color:color-mix(in srgb,var(--ink) 32%,transparent); font-size:11px; }
+.notebook-index a:hover,.notebook-index a[aria-current="page"],.notebook-index a[aria-current="page"] .notebook-index-number { color:var(--ink); }
+.notebook-index a[aria-current="page"] .index-icon { opacity:1; }
+.notebook-owner { font-size:11px; }
+.notebook-kicker { color:var(--muted); font-size:11px; font-weight:500; letter-spacing:.08em; }
+.notebook-name { font-family:var(--display); font-size:clamp(28px,3.7vh,42px); font-weight:400; letter-spacing:-.035em; line-height:1.2; }
+.notebook-description { color:var(--muted); font-family:var(--sans); font-size:12px; }
+.notebook-page .sb-caption { font-family:var(--sans); font-size:14px; font-weight:500; line-height:1.5; }
+.notebook-count { color:var(--muted); font-family:var(--sans); font-size:10px; letter-spacing:.08em; }
+.notebook-navigation .sb-arrow { font-family:var(--sans); color:var(--muted); border-color:var(--line); background:color-mix(in srgb,var(--paper) 48%,transparent); transition:color 200ms ease,background 200ms ease,transform 220ms var(--ease-out); }
+.notebook-navigation .sb-arrow:hover:not(:disabled) { color:var(--ink); background:var(--soft); border-color:var(--line); transform:translateY(-1px); }
+body.notebook-page .theme-toggle { right:var(--page-padding); padding:0; color:var(--muted); background:color-mix(in srgb,var(--paper) 48%,transparent); border-color:var(--line); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); }
+.notebook-footer { color:var(--muted); border-color:var(--line); font-family:var(--sans); }
+@media(max-width:1000px) { .notebook-owner { display:none; } }
+@media(max-width:600px) { .notebook-index { gap:14px; } .notebook-index a { font-size:11px; gap:5px; } .notebook-index-number,.notebook-index .index-icon { display:none; } .notebook-header { padding-right:42px; } }
+@media(max-height:650px) { .notebook-name { font-size:28px; } }

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="1240" viewBox="0 0 1760 1240">
+<defs>
+<linearGradient id="cloth" x1="0" x2="1"><stop stop-color="#222d27"/><stop offset=".07" stop-color="#344139"/><stop offset=".5" stop-color="#3c483e"/><stop offset="1" stop-color="#29372f"/></linearGradient>
+<linearGradient id="spine"><stop stop-color="#0c171180"/><stop offset=".38" stop-color="#101b1230"/><stop offset=".7" stop-color="#71816b35"/><stop offset="1" stop-color="#20302300"/></linearGradient>
+<linearGradient id="foil" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6c092"/><stop offset=".45" stop-color="#b8a271"/><stop offset=".7" stop-color="#e0cda5"/><stop offset="1" stop-color="#9e875c"/></linearGradient>
+<pattern id="weave" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 1H6M1 0V6" stroke="#bfc6a2" stroke-opacity=".085" stroke-width="1"/><path d="M0 4H6M4 0V6" stroke="#060e08" stroke-opacity=".15" stroke-width="1"/></pattern>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="3" seed="14" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".15"/></feComponentTransfer></filter>
+<filter id="impress"><feDropShadow dx="0" dy="1" stdDeviation=".6" flood-color="#0c180d" flood-opacity=".85"/></filter>
+<clipPath id="cover"><rect x="880" y="55" width="790" height="1130" rx="11"/></clipPath>
+</defs>
+<rect x="878" y="59" width="794" height="1132" rx="12" fill="#17251d"/>
+<rect x="880" y="55" width="790" height="1130" rx="11" fill="url(#cloth)"/>
+<g clip-path="url(#cover)"><rect x="880" y="55" width="790" height="1130" fill="url(#weave)"/><rect x="880" y="55" width="790" height="1130" filter="url(#grain)" style="mix-blend-mode:soft-light"/></g>
+<rect x="899" y="73" width="752" height="1092" rx="5" fill="none" stroke="#a9b098" stroke-opacity=".11"/>
+<path d="M909 78V1163" stroke="#142019" stroke-width="2" stroke-opacity=".5"/>
+<rect x="880" y="55" width="52" height="1130" fill="url(#spine)" transform=""/>
+
+<g fill="url(#foil)" text-anchor="middle" filter="url(#impress)">
+<text x="1275" y="302" font-family="sans-serif" font-size="15" letter-spacing="5">DRAWINGS &amp; OBSERVATIONS</text>
+<text x="1275" y="512" font-family="Georgia,serif" font-size="77" letter-spacing="-2">The notebook.</text>
+<path d="M1238 575H1312" stroke="#c4ad7e" stroke-width="1"/>
+<text x="1275" y="644" font-family="Georgia,serif" font-size="26" font-style="italic" opacity=".85">Pencil, paper &amp; a little colour.</text>
+<text x="1275" y="1003" font-family="sans-serif" font-size="18" letter-spacing="4">VIBHORE SINGHAL</text>
+<text x="1275" y="1063" font-family="Georgia,serif" font-size="16" letter-spacing="3" opacity=".7">VOL. 01</text>
+</g>
+</svg>

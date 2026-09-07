@@ -1,445 +1,393 @@
-(() => {
-  // Later: set `src` to a 1280×720 open-book photo in images/notebook/
-  const SPREADS = [
-    { title: "X-S20 / Virtus", src: "", left: "camera", right: "car" },
-    { title: "Sunday pan / Edit night", src: "", left: "pan", right: "film" },
-    { title: "Desk notes / Court lights", src: "", left: "desk", right: "racket" },
-    { title: "Plant by the door / Late Bangalore", src: "", left: "plant", right: "street" }
-  ];
+// Page-turn geometry adapted from Meng To; provenance retained in images/notebook/mengto/ATTRIBUTION.md.
+(()=>{
 
-  const book = document.querySelector("#book");
-  const fullEl = document.querySelector("#book-full");
-  const flipEl = document.querySelector("#book-flip");
-  const captionsEl = document.querySelector("#notebook-captions");
-  const countEl = document.querySelector("#notebook-count");
-  const paginationEl = document.querySelector("#notebook-pagination");
-  const prevButtons = [document.querySelector("#notebook-prev"), document.querySelector("#notebook-zone-prev")];
-  const nextButtons = [document.querySelector("#notebook-next"), document.querySelector("#notebook-zone-next")];
+/* =====================================================================
+   Meng To — sketchbook hero.
+   Spreads are transparent PNGs of an open sketchbook generated with
+   Higgsfield.  The leaf that turns is a real curved surface: a chain of
+   nested strips whose tangent sweeps through an arc, so the page bends
+   the way paper bends instead of pivoting like a flat door.
+   ===================================================================== */
+const Q=new URLSearchParams(location.search);
+const DIR='images/notebook/spreads/';
+const PAGES=[{"file":"front-cover.svg","title":"The notebook.","place":"Front cover","cover":"front"},{"file":"spider-man.svg","title":"Spider-Man","place":"Character studies"},{"file":"cactus.svg","title":"A little green","place":"Watercolour study"},{"file":"jack-sparrow.svg","title":"Captain Jack Sparrow","place":"Portrait study"},{"file":"wolverine.svg","title":"Wolverine","place":"Light & shadow"},{"file":"po.svg","title":"Po","place":"Character studies"},{"file":"iron-man.svg","title":"Iron Man","place":"Armour study"},{"file":"back-cover.svg","title":"Until the next page.","place":"Back cover","cover":"back"}];
+PAGES.forEach(p=>p.url=DIR+p.file+'?v=covers-1');
+const M=PAGES.length, LAND=0;
 
-  if (!book) return;
+const wrap=document.getElementById('sbWrap');
+const stage=document.getElementById('sbStage');
+const sb3d=document.getElementById('sb3d');
+const book=document.getElementById('sbBook');
+const capBox=document.getElementById('sbCaptions');
+const hint=document.getElementById('sbHint');
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const simple = reduceMotion || window.matchMedia("(max-width: 640px), (pointer: coarse)").matches;
-  const pages = SPREADS.map((spread, index) => ({
-    ...spread,
-    w: 864,
-    h: 720,
-    href: spread.src || drawSpread(spread, index)
-  }));
+/* ------------------------------------------------ the turning leaf */
+const N=18;            /* strips — enough for a smooth curve          */
+const SPAN=0.449;      /* gutter → outer page edge, as a fraction     */
+const BETA=0.60;       /* peak curl of the arc, radians              */
+let idx=0, turn=null;  /* turn = {dir, from, to, t}                   */
+let strips=[];         /* the chain, kept for per-frame lighting       */
 
-  let index = 0;
-  let flip = null;
-  let flipId = 0;
-  let flipTimer;
-  let suppressClickUntil = 0;
-  const pageButtons = pages.map((page, pageIndex) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.setAttribute("aria-label", `Spread ${pageIndex + 1}: ${page.title}`);
-    button.addEventListener("click", () => {
-      if (flip || pageIndex === index) return;
-      go(pageIndex > index ? "next" : "prev", pageIndex);
-    });
-    paginationEl?.append(button);
-    return button;
-  });
+function el(t,c){const e=document.createElement(t);if(c)e.className=c;return e}
+function imgEl(i,side){
+  const im=new Image();im.className='sb-half-img '+side;
+  im.draggable=false;im.alt='';im.src=PAGES[i].url;return im;
+}
 
-  const finishFlip = () => {
-    if (!flip) return;
-    window.clearTimeout(flipTimer);
-    index = flip.to;
-    flip = null;
-    paint();
-  };
+function halfEl(pos,i){
+  const d=el('div','sb-half '+pos);
+  d.appendChild(imgEl(i,pos));
+  d.appendChild(el('div','gutter-shade '+pos));
+  return d;
+}
+/* build the strip chain once per turn; background offsets are pure
+   geometry, so they never need touching again while it animates */
+function buildCurl(dir,from,to){
+  strips=[];
+  const c=el('div','curl '+dir);
+  c.style.setProperty('--n',N);
+  c.style.setProperty('--span',SPAN);
+  let host=c;
+  for(let i=0;i<N;i++){
+    const s=el('div','strip');
+    s.style.setProperty('--i',i);
+    const gut='calc(var(--bw) * 0.5)';
+    const sw='calc(var(--bw) * '+SPAN+' / '+N+')';
+    const A='calc(-1 * ('+gut+' + '+i+' * '+sw+'))';         /* faces the from-page  */
+    const B='calc('+(i+1)+' * '+sw+' - '+gut+')';            /* faces the to-page    */
+    const f=el('div','face front'), b=el('div','face back');
+    const dress=(e,url,px)=>{
+      e.style.backgroundImage='url('+url+')';
+      e.style.backgroundPositionX=px;
+    };
+    dress(f,PAGES[from].url, dir==='next'?A:B);
+    dress(b,PAGES[to].url,   dir==='next'?B:A);
+    f.appendChild(el('div','sh'));f.appendChild(el('div','gl'));
+    b.appendChild(el('div','sh'));b.appendChild(el('div','gl'));
+    s.appendChild(f);s.appendChild(b);
+    if(i===N-1)s.classList.add('edge');
+    host.appendChild(s);host=s;
+    strips.push(s);
+  }
+  return c;
+}
+function applyTurn(t){
+  const th=Math.PI*t;                       /* how far the leaf has swung */
+  const beta=BETA*Math.sin(Math.PI*t);      /* it is flat at both ends    */
+  const D=180/Math.PI;
+  const tt=th+beta, td=2*beta/N;
+  sb3d.style.setProperty('--tt',(tt*D).toFixed(2)+'deg');
+  sb3d.style.setProperty('--td',(td*D).toFixed(3)+'deg');
+  sb3d.style.setProperty('--shade',Math.sin(Math.PI*t).toFixed(3));
+  fadeCaption(t);
+  for(let i=0;i<strips.length;i++){
+    const l1=Math.abs(Math.cos(tt-i*td));        /* facing at this strip's near edge */
+    const l2=Math.abs(Math.cos(tt-(i+1)*td));    /* ...and at its far edge           */
+    const st=strips[i].style;
+    st.setProperty('--lit',l1.toFixed(3));
+    st.setProperty('--a1',((1-l1)*.62).toFixed(3));
+    st.setProperty('--a2',((1-l2)*.62).toFixed(3));
+  }
+}
+function paint(){
+  book.textContent='';
+  if(!turn){
+    const f=el('div','sb-full');
+    const im=new Image();im.src=PAGES[idx].url;im.alt=PAGES[idx].title;
+    im.draggable=false;
+    f.appendChild(im);book.appendChild(f);
+    sb3d.style.setProperty('--shade','0');
+  }else{
+    const next=turn.dir==='next';
+    book.appendChild(halfEl('left', next?turn.from:turn.to));
+    book.appendChild(halfEl('right',next?turn.to:turn.from));
+    book.appendChild(buildCurl(turn.dir,turn.from,turn.to));
+    applyTurn(turn.t);
+  }
+  const a=el('button','sb-zone sb-prev'),b=el('button','sb-zone sb-next');
+  a.setAttribute('aria-label','previous page');b.setAttribute('aria-label','next page');
+  book.appendChild(a);book.appendChild(b);
+  layout();
+  caption();
+  marks();
+  if(typeof syncZoomLayer==='function')syncZoomLayer();
+  if(typeof placeLoupe==='function')placeLoupe();
+}
+function caption(){
+  capBox.textContent='';
+  capOut=capIn=null;
+  if(turn){
+    capOut=el('p','sb-caption live');capOut.textContent=PAGES[turn.from].title;capBox.appendChild(capOut);
+    capIn=el('p','sb-caption live');capIn.textContent=PAGES[turn.to].title;capBox.appendChild(capIn);
+    fadeCaption(turn.t);
+  }else{
+    const p=el('p','sb-caption');p.textContent=PAGES[idx].title;capBox.appendChild(p);
+  }
+}
+let capOut=null,capIn=null;
+function fadeCaption(t){
+  if(!capOut||!capIn)return;
+  /* the old title is gone before the new one arrives, so they never
+     sit on top of each other mid-drag */
+  const out=1-Math.max(0,Math.min(1,(t-0.10)/0.28));
+  const inn=Math.max(0,Math.min(1,(t-0.56)/0.30));
+  capOut.style.opacity=out.toFixed(3);
+  capIn.style.opacity=inn.toFixed(3);
+}
+function layout(){
+  sb3d.style.setProperty('--bw',book.clientWidth+'px');
+}
+addEventListener('resize',layout);
 
-  const go = (dir, destination) => {
-    if (flip) return;
-    const from = index;
-    const to = destination ?? (dir === "next" ? (from + 1) % pages.length : (from - 1 + pages.length) % pages.length);
-    if (simple) {
-      index = to;
-      paint();
-      return;
+/* ------------------------------------------------------ spring loop */
+let spring=null;
+function animateTo(target,onDone,stiff,damp){
+  spring={kind:'spring',v:0,target:target,done:onDone,k:stiff||150,c:damp||22};
+  kick();
+}
+/* the riffle wants a fixed tempo, not a spring settling time */
+function tweenTo(target,dur,onDone){
+  spring={kind:'tween',from:turn?turn.t:0,target:target,dur:dur,e:0,done:onDone};
+  kick();
+}
+let raf=null,last=0;
+function tick(now){
+  raf=null;
+  const dt=Math.min(0.032,(now-last)/1000||0.016);last=now;
+  if(spring&&turn){
+    const s=spring;
+    if(s.kind==='tween'){
+      s.e+=dt;
+      const k=Math.min(1,s.e/s.dur);
+      turn.t=s.from+(s.target-s.from)*k;
+      applyTurn(turn.t);
+      if(k>=1){spring=null;const d=s.done;d&&d();}
+    }else{
+      const x=turn.t-s.target;
+      s.v+= (-s.k*x - s.c*s.v)*dt;
+      turn.t+=s.v*dt;
+      if(Math.abs(turn.t-s.target)<0.002&&Math.abs(s.v)<0.02){
+        turn.t=s.target;spring=null;
+        applyTurn(turn.t);
+        const d=s.done;d&&d();
+      }else applyTurn(turn.t);
     }
-    flipId += 1;
-    flip = { id: flipId, dir, from, to };
-    paint();
-    flipTimer = window.setTimeout(finishFlip, 900);
-  };
+  }
+  viewSpring();
+  const lmoved=false;
+  /* kick() may already have queued the next frame from a done-callback */
+  if((spring||viewActive||lmoved)&&raf===null) raf=requestAnimationFrame(tick);
+}
+function kick(){ if(raf===null){last=performance.now();raf=requestAnimationFrame(tick);} }
 
-  const paint = () => {
-    const current = pages[flip ? flip.to : index];
-    const currentIndex = flip ? flip.to : index;
-    book.setAttribute("aria-label", `Spread ${currentIndex + 1} of ${pages.length}: ${current.title}`);
-    countEl.innerHTML = `${String(currentIndex + 1).padStart(2, "0")} <span>/ ${String(pages.length).padStart(2, "0")}</span>`;
-    pageButtons.forEach((button, pageIndex) => button.setAttribute("aria-current", String(pageIndex === currentIndex)));
-    if (!flip || simple) {
-      fullEl.className = "sb-full";
-      fullEl.innerHTML = "";
-      fullEl.append(img(current.href, current.title));
-      flipEl.innerHTML = "";
-    } else {
-      fullEl.innerHTML = "";
-      const from = pages[flip.from];
-      const to = pages[flip.to];
-      const next = flip.dir === "next";
-      flipEl.innerHTML = "";
-      flipEl.append(
-        half(next ? from : to, "left", next ? "sb-out" : "sb-in"),
-        half(next ? to : from, "right", next ? "sb-in" : "sb-out"),
-        flap(from, to, flip.dir)
-      );
-    }
+/* ------------------------------------------- tilt + zoom of the book */
+const TILT_X=4.5, TILT_Y=7;      /* degrees — deliberately restrained   */
+const ZOOM_MIN=0.9, ZOOM_MAX=1.5;
+const view={rx:0,ry:0,z:1, trx:0,try_:0,tz:1};
+let viewActive=false;
+let lastZ=1;
+function applyView(){
+  sb3d.style.setProperty('--rx',view.rx.toFixed(2)+'deg');
+  sb3d.style.setProperty('--ry',view.ry.toFixed(2)+'deg');
+  sb3d.style.setProperty('--zoom',view.z.toFixed(3));
+  /* the glass stays put, but the page under it has moved */
+  if(view.z!==lastZ){lastZ=view.z;if(typeof placeLoupe==='function')placeLoupe();}
+}
+function viewSpring(){
+  const e=0.14;
+  let moved=false;
+  for(const [k,t] of [['rx','trx'],['ry','try_'],['z','tz']]){
+    const d=view[t]-view[k];
+    if(Math.abs(d)>0.0006){view[k]+=d*e;moved=true;}
+    else view[k]=view[t];
+  }
+  if(moved)applyView();
+  viewActive=moved;
+  return moved;
+}
+function setView(rx,ry,z){
+  view.trx=Math.max(-TILT_X,Math.min(TILT_X,rx));
+  view.try_=Math.max(-TILT_Y,Math.min(TILT_Y,ry));
+  view.tz=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,z));
+  viewActive=true;kick();
+  if(typeof syncZoom==='function')syncZoom();
+}
+/* the book leans toward the cursor — no dragging, and never far */
+function tiltTo(cx,cy){
+  if(drag)return;                       /* hold still while a page is being turned */
+  const r=book.getBoundingClientRect();
+  if(!r.width)return;
+  const nx=Math.max(-1,Math.min(1,(cx-(r.left+r.width/2))/(r.width*0.62)));
+  const ny=Math.max(-1,Math.min(1,(cy-(r.top+r.height/2))/(r.height*0.9)));
+  setView(-ny*TILT_X, nx*TILT_Y, view.tz);
+}
+addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch')return;
+  tiltTo(e.clientX,e.clientY);
+},{passive:true});
+addEventListener('pointerout',e=>{if(!e.relatedTarget)setView(0,0,view.tz)});
+addEventListener('blur',()=>setView(0,0,view.tz));
+/* the wheel belongs to the page — zoom is on the toolbar, or a double click
+   to come back to 100% */
+stage.addEventListener('dblclick',()=>setView(view.trx,view.try_,1));
 
-    const outgoing = flip ? `<p class="sb-caption cap-out" aria-hidden="true">${pages[flip.from].title}</p>` : "";
-    captionsEl.innerHTML = `${outgoing}<p class="sb-caption">${current.title}</p>`;
-  };
+/* ------------------------------------------------------- pointer work */
+let drag=null;
+function bookRect(){return book.getBoundingClientRect()}
+function hideHint(){hint.classList.add('gone')}
 
-  const img = (src, alt = "", side = "") => {
-    const node = document.createElement("img");
-    node.src = src;
-    node.alt = alt;
-    node.draggable = false;
-    node.width = 864;
-    node.height = 720;
-    if (side) node.className = `sb-half-img ${side}`;
-    return node;
-  };
+stage.addEventListener('pointerdown',e=>{
+  if(e.button!==0)return;
+  e.preventDefault();                     /* no text selection, no image drag */
+  const onBook=e.target.closest('.sb-zone');
+  stage.setPointerCapture(e.pointerId);
+  hideHint();
+  if(!onBook||introOn)return;
+  const r=bookRect();
+  const dir=(e.clientX-r.left)/r.width>0.5?'next':'prev';
+  startTurn(dir,0);
+  if(!turn)return;
+  drag={dir:dir,x0:e.clientX,w:r.width,moved:0,vel:0,tPrev:performance.now()};
+});
+stage.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  const dx=e.clientX-drag.x0;
+  drag.moved=Math.max(drag.moved,Math.abs(dx));
+  const raw=(drag.dir==='next'? -dx : dx)/(drag.w*0.62);
+  const t=Math.max(0,Math.min(1,raw));
+  const now=performance.now();
+  drag.vel=(t-(turn?turn.t:0))/Math.max(0.001,(now-drag.tPrev)/1000);
+  drag.tPrev=now;
+  if(turn){turn.t=t;applyTurn(t);}
+});
+function endDrag(e){
+  if(!drag)return;
+  const d=drag;drag=null;
+  if(!turn)return;
+  if(d.moved<6){                              /* a tap, not a drag */
+    commit();return;
+  }
+  const go = turn.t>0.42 || d.vel>1.1;
+  if(go)commit(); else cancel();
+}
+stage.addEventListener('dragstart',e=>e.preventDefault());
+stage.addEventListener('selectstart',e=>e.preventDefault());
+stage.addEventListener('pointerup',endDrag);
+stage.addEventListener('pointercancel',endDrag);
 
-  const half = (page, side, state) => {
-    const node = document.createElement("div");
-    node.className = `sb-half ${side} ${state}`;
-    node.append(img(page.href, "", side));
-    return node;
-  };
-
-  const flap = (from, to, dir) => {
-    const node = document.createElement("div");
-    node.className = `sb-flap ${dir}`;
-    const front = document.createElement("div");
-    front.className = "sb-face front";
-    front.append(img(from.href, "", dir === "next" ? "right" : "left"));
-    const back = document.createElement("div");
-    back.className = "sb-face back";
-    back.append(img(to.href, "", dir === "next" ? "left" : "right"));
-    node.append(front, back);
-    node.addEventListener("animationend", (event) => {
-      if (event.target !== node || !flip || flip.id !== flipId) return;
-      finishFlip();
-    });
-    return node;
-  };
-
-  prevButtons.forEach((button) => button?.addEventListener("click", () => {
-    if (Date.now() >= suppressClickUntil) go("prev");
-  }));
-  nextButtons.forEach((button) => button?.addEventListener("click", () => {
-    if (Date.now() >= suppressClickUntil) go("next");
-  }));
-  let touchStart = null;
-  book.addEventListener("pointerdown", (event) => {
-    if (event.pointerType === "mouse" || !event.isPrimary) return;
-    touchStart = { x: event.clientX, y: event.clientY };
-  });
-  book.addEventListener("pointerup", (event) => {
-    if (!touchStart) return;
-    const dx = event.clientX - touchStart.x;
-    const dy = event.clientY - touchStart.y;
-    touchStart = null;
-    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
-    suppressClickUntil = Date.now() + 400;
-    go(dx < 0 ? "next" : "prev");
-  });
-  book.addEventListener("pointercancel", () => { touchStart = null; });
-  window.addEventListener("keydown", (event) => {
-    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-    const tag = event.target?.tagName;
-    if (document.documentElement.classList.contains("is-gated") || tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target?.isContentEditable) return;
-    event.preventDefault();
-    go(event.key === "ArrowRight" ? "next" : "prev");
-  });
-
+/* ------------------------------------------------------ turn control */
+function startTurn(dir,t){
+  if(!turn&&((dir==='prev'&&idx===0)||(dir==='next'&&idx===M-1)))return;
+  spring=null;
+  if(turn){idx=turn.to;turn=null;}      /* settle anything still in flight */
+  if(typeof shoveLoupe==='function')shoveLoupe(dir);
+  const from=idx;
+  turn={dir:dir,from:from,to:dir==='next'?Math.min(M-1,from+1):Math.max(0,from-1),t:t||0};
   paint();
+}
+function commit(){
+  if(!turn)return;
+  if(REDUCED){idx=turn.to;turn=null;paint();return;}
+  animateTo(1,()=>{idx=turn.to;turn=null;paint();},170,26);
+  kick();
+}
+function cancel(){
+  if(!turn)return;
+  animateTo(0,()=>{turn=null;paint();},150,24);
+  kick();
+}
+function step(dir){
+  if(introOn)endIntro();
+  if(turn){ /* finish whatever is in flight first */ idx=turn.to;turn=null; }
+  startTurn(dir,0);commit();
+}
+function goTo(i){
+  if(introOn)endIntro();
+  if(i===idx)return;
+  if(turn){idx=turn.to;turn=null;}
+  if(Math.abs(i-idx)===1){step(i>idx?'next':'prev');return;}
+  startTurn(i>idx?'next':'prev',0);
+  if(turn){turn.to=i;paint();commit();}
+}
+document.getElementById('sbLeft').onclick=()=>step('prev');
+document.getElementById('sbRight').onclick=()=>step('next');
+addEventListener('keydown',e=>{
+  if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;
+  if(e.metaKey||e.ctrlKey||e.altKey||document.documentElement.classList.contains('is-gated'))return;
+  const t=e.target;
+  if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
+  e.preventDefault();hideHint();
+  step(e.key==='ArrowRight'?'next':'prev');
+});
 
-  function drawSpread(spread, seed) {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1280;
-    canvas.height = 720;
-    const ctx = canvas.getContext("2d");
-    const book = { x: 248, y: 42, w: 784, h: 628 };
-    const spine = book.x + book.w / 2;
 
-    ctx.save();
-    ctx.fillStyle = "rgba(20, 22, 30, 0.16)";
-    ctx.filter = "blur(22px)";
-    ctx.beginPath();
-    ctx.ellipse(640, 668, 292, 28, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+/* --------------------------------------------------------- the index */
+const plateList=document.getElementById('plateList');
+PAGES.forEach((p,i)=>{
+ const b=el('button','plate');b.type='button';b.setAttribute('aria-label',p.cover?p.place:'Sketch '+i+': '+p.title);b.onclick=()=>goTo(i);plateList.appendChild(b);
+});
+function marks(){
+ const cur=turn?turn.to:idx;
+ const page=PAGES[cur];
+ const state=turn?'open':(page.cover||'open');
+ wrap.dataset.cover=state;
+ plateList.querySelectorAll('.plate').forEach((b,i)=>b.setAttribute('aria-current',String(i===cur)));
+ document.getElementById('notebook-count').innerHTML=page.cover?(page.cover==='front'?'VOL. 01':'FIN'):String(cur).padStart(2,'0')+' <span>/ 06</span>';
+ book.setAttribute('aria-label',page.cover?page.place+': '+page.title:'Sketch '+cur+' of 6: '+page.title);
+ document.getElementById('sbLeft').disabled=cur===0;
+ document.getElementById('sbRight').disabled=cur===M-1;
+ const prev=book.querySelector('.sb-prev'),next=book.querySelector('.sb-next');
+ if(prev)prev.disabled=cur===0;
+ if(next)next.disabled=cur===M-1;
+ hint.textContent=page.cover==='front'?'Click or drag to open':page.cover==='back'?'Turn back to reopen':'Drag a page to turn';
+}
 
-    ctx.fillStyle = "#c4b49a";
-    roundRect(ctx, book.x - 10, book.y + 10, book.w + 20, book.h + 8, 10);
-    ctx.fill();
-    ctx.fillStyle = "#b9a88d";
-    ctx.fillRect(book.x - 10, book.y + 18, 8, book.h - 8);
-    ctx.fillRect(book.x + book.w + 2, book.y + 18, 8, book.h - 8);
-
-    for (let i = 3; i >= 0; i -= 1) {
-      ctx.fillStyle = i % 2 ? "#efe8dc" : "#e7dfd1";
-      ctx.fillRect(book.x - 4 + i, book.y + 8, 5, book.h - 6);
-      ctx.fillRect(book.x + book.w - 1 - i, book.y + 8, 5, book.h - 6);
-    }
-
-    const left = paperPage(spread.left, spread.title.split(" / ")[0], seed, seed * 2 + 1);
-    const right = paperPage(spread.right, spread.title.split(" / ")[1] || "", seed + 11, seed * 2 + 2);
-    const pageY = book.y + 6;
-    const pageH = book.h - 14;
-    const pageW = book.w / 2;
-
-    ctx.save();
-    pathPage(ctx, book.x, pageY, pageW, pageH, "left");
-    ctx.clip();
-    ctx.drawImage(left, book.x, pageY, pageW, pageH);
-    ctx.restore();
-
-    ctx.save();
-    pathPage(ctx, spine, pageY, pageW, pageH, "right");
-    ctx.clip();
-    ctx.drawImage(right, spine, pageY, pageW, pageH);
-    ctx.restore();
-
-    const gutter = ctx.createLinearGradient(spine - 42, 0, spine + 42, 0);
-    gutter.addColorStop(0, "rgba(70, 52, 36, 0)");
-    gutter.addColorStop(0.45, "rgba(70, 52, 36, 0.1)");
-    gutter.addColorStop(0.5, "rgba(40, 30, 20, 0.22)");
-    gutter.addColorStop(0.55, "rgba(70, 52, 36, 0.1)");
-    gutter.addColorStop(1, "rgba(70, 52, 36, 0)");
-    ctx.fillStyle = gutter;
-    ctx.fillRect(spine - 42, pageY, 84, pageH);
-
-    ctx.strokeStyle = "rgba(60, 46, 32, 0.18)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(spine + 0.5, pageY + 8);
-    ctx.lineTo(spine + 0.5, pageY + pageH - 8);
-    ctx.stroke();
-
-    const cropped = document.createElement("canvas");
-    cropped.width = 864;
-    cropped.height = 720;
-    cropped.getContext("2d").drawImage(canvas, 208, 0, 864, 720, 0, 0, 864, 720);
-    return cropped.toDataURL("image/png");
+/* ---------------------------------------------------------- the riffle */
+let riffle=null,riffleAt=0,introOn=false;
+function endIntro(){
+  introOn=false;wrap.classList.remove('intro','b2');
+}
+function riffleStep(){
+  const s=riffle[riffleAt];
+  wrap.classList.toggle('b2',s.bell>0.55);
+  startTurn('next',0);
+  tweenTo(1,s.dur,()=>{
+    idx=turn.to;turn=null;
+    riffleAt++;
+    if(introOn&&riffleAt<riffle.length){paint();riffleStep();}
+    else{endIntro();paint();}
+  });
+}
+function startIntro(){
+  const coarse=matchMedia('(max-width: 640px), (pointer: coarse)').matches;
+  if(coarse||REDUCED||Q.has('nointro')){idx=LAND;paint();return;}
+  const steps=M+LAND;
+  riffle=[];
+  for(let r=0;r<steps;r++){
+    const bell=Math.sin(Math.PI*(r/(steps-1)));
+    riffle.push({bell:bell,dur:0.26-0.19*bell});
   }
+  riffleAt=0;introOn=true;wrap.classList.add('intro');
+  riffleStep();
+}
 
-  function paperPage(doodle, title, seed, folio) {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 1408;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#f3eee4";
-    ctx.fillRect(0, 0, 1024, 1408);
-    const image = ctx.getImageData(0, 0, 1024, 1408);
-    const data = image.data;
-    let s = (seed + 3) * 997 + 13;
-    for (let i = 0; i < data.length; i += 4) {
-      s = (s * 16807 + 11) % 2147483647;
-      const n = (s % 9) - 4;
-      data[i] = Math.min(255, data[i] + n);
-      data[i + 1] = Math.min(255, data[i + 1] + n);
-      data[i + 2] = Math.min(255, data[i + 2] + n);
-    }
-    ctx.putImageData(image, 0, 0);
-    ctx.fillStyle = "#8b7a67";
-    ctx.font = "22px monospace";
-    ctx.fillText("OBSERVATIONS", 140, 130);
-    ctx.textAlign = "right";
-    ctx.fillText(String(folio).padStart(2, "0"), 884, 130);
-    ctx.textAlign = "left";
-    ctx.strokeStyle = "rgba(95, 78, 56, 0.2)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(140, 160);
-    ctx.lineTo(884, 160);
-    ctx.stroke();
-    const pen = makePen(ctx, seed * 17 + title.length);
-    ({
-      camera: drawCamera,
-      car: drawCar,
-      pan: drawPan,
-      film: drawFilm,
-      desk: drawDesk,
-      racket: drawRacket,
-      plant: drawPlant,
-      street: drawStreet
-    })[doodle](pen);
-    pen.note(title);
-    return canvas;
+/* ------------------------------------------------------------- boot */
+(async function boot(){
+  idx=Q.has('shot')?(parseInt(Q.get('shot'),10)||0)%M:0;
+  paint();applyView();
+  await Promise.all(PAGES.map(p=>{
+    const im=new Image();im.src=p.url;
+    return im.decode?im.decode().catch(()=>{}):new Promise(r=>{im.onload=im.onerror=r});
+  }));
+  if(document.fonts&&document.fonts.ready)await document.fonts.ready.catch(()=>{});
+  
+  document.body.dataset.ready='1';
+  if(Q.has('shot')){
+    if(Q.has('t')){startTurn(Q.get('dir')||'next',parseFloat(Q.get('t')));}
+    return;
   }
+  // Keep the front cover closed until the reader opens it.
+})();
 
-  function pathPage(ctx, x, y, w, h, side) {
-    const r = 16;
-    ctx.beginPath();
-    if (side === "left") {
-      ctx.moveTo(x + w, y);
-      ctx.lineTo(x + r, y);
-      ctx.quadraticCurveTo(x, y, x, y + r);
-      ctx.lineTo(x, y + h - r);
-      ctx.quadraticCurveTo(x, y + h, x + r, y + h);
-      ctx.lineTo(x + w, y + h);
-    } else {
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x, y + h);
-    }
-    ctx.closePath();
-  }
-
-  function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  function makePen(ctx, seed) {
-    let s = seed || 1;
-    const rand = () => {
-      s = (s * 16807 + 11) % 2147483647;
-      return s / 2147483647;
-    };
-    const jitter = (n) => (rand() - 0.5) * n;
-    const stroke = (points, width = 1.8) => {
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = `rgba(34, 30, 26, ${0.68 + rand() * 0.24})`;
-      ctx.lineWidth = width + 0.4 + rand() * 0.6;
-      ctx.beginPath();
-      points.forEach((point, i) => {
-        const x = point[0] + jitter(1.4);
-        const y = point[1] + jitter(1.4);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      });
-      ctx.stroke();
-      ctx.restore();
-    };
-    const curve = (a, b, c, d, width = 1.8) => {
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.strokeStyle = `rgba(34, 30, 26, ${0.7 + rand() * 0.2})`;
-      ctx.lineWidth = width;
-      ctx.beginPath();
-      ctx.moveTo(a[0] + jitter(1), a[1] + jitter(1));
-      ctx.bezierCurveTo(b[0] + jitter(2), b[1] + jitter(2), c[0] + jitter(2), c[1] + jitter(2), d[0] + jitter(1), d[1] + jitter(1));
-      ctx.stroke();
-      ctx.restore();
-    };
-    const oval = (x, y, rx, ry, width = 1.7) => {
-      const pts = [];
-      for (let i = 0; i <= 22; i += 1) {
-        const a = (i / 22) * Math.PI * 2;
-        pts.push([x + Math.cos(a) * rx + jitter(1.2), y + Math.sin(a) * ry + jitter(1.2)]);
-      }
-      stroke(pts, width);
-    };
-    const hatch = (x, y, w, h, n = 8) => {
-      for (let i = 0; i < n; i += 1) {
-        const t = i / n;
-        stroke([[x + t * w + jitter(3), y + jitter(3)], [x + t * w - 8 + jitter(3), y + h + jitter(3)]], 1.1);
-      }
-    };
-    const note = (text) => {
-      ctx.save();
-      ctx.translate(140, 1280);
-      ctx.rotate(-0.04 + jitter(0.02));
-      ctx.fillStyle = "rgba(42, 38, 32, 0.62)";
-      ctx.font = "italic 38px Georgia, serif";
-      ctx.fillText(text.toLowerCase(), 0, 0);
-      ctx.restore();
-    };
-    return { rand, jitter, stroke, curve, oval, hatch, note };
-  }
-
-  function drawCamera(pen) {
-    pen.stroke([[220, 430], [780, 420], [800, 780], [210, 790], [220, 430]], 2.1);
-    pen.stroke([[250, 430], [300, 320], [520, 310], [560, 428]], 1.7);
-    pen.oval(520, 600, 118, 118, 2);
-    pen.oval(520, 600, 72, 72, 1.5);
-    pen.oval(520, 600, 22, 22, 1.3);
-    pen.stroke([[250, 470], [360, 468]], 1.4);
-    pen.hatch(230, 700, 160, 70, 7);
-    pen.curve([180, 360], [120, 520], [130, 700], [210, 790], 1.5);
-  }
-
-  function drawCar(pen) {
-    pen.curve([160, 720], [220, 520], [780, 500], [860, 720], 2.1);
-    pen.curve([160, 720], [300, 760], [700, 760], [860, 720], 1.8);
-    pen.stroke([[250, 560], [360, 430], [640, 420], [740, 550]], 1.8);
-    pen.stroke([[400, 430], [410, 555]], 1.3);
-    pen.oval(320, 740, 62, 62, 2);
-    pen.oval(320, 740, 28, 28, 1.3);
-    pen.oval(730, 738, 62, 62, 2);
-    pen.oval(730, 738, 28, 28, 1.3);
-    pen.hatch(500, 590, 150, 90, 6);
-  }
-
-  function drawPan(pen) {
-    pen.oval(510, 620, 250, 78, 2);
-    pen.oval(510, 600, 210, 58, 1.5);
-    pen.stroke([[740, 590], [900, 470], [930, 450]], 2);
-    pen.curve([360, 600], [400, 540], [460, 530], [500, 570], 1.4);
-    pen.hatch(360, 640, 220, 50, 8);
-  }
-
-  function drawFilm(pen) {
-    pen.stroke([[260, 280], [760, 270], [780, 980], [250, 990], [260, 280]], 2);
-    for (let y = 320; y < 960; y += 90) {
-      pen.stroke([[290, y], [730, y + pen.jitter(4)]], 1.3);
-    }
-    pen.hatch(300, 700, 180, 80, 7);
-  }
-
-  function drawDesk(pen) {
-    pen.stroke([[180, 780], [840, 770], [800, 980], [220, 990], [180, 780]], 1.8);
-    pen.stroke([[250, 520], [620, 510], [640, 760], [260, 770], [250, 520]], 1.7);
-    pen.oval(760, 600, 48, 70, 1.6);
-    pen.stroke([[760, 670], [760, 760]], 1.4);
-    pen.hatch(280, 800, 200, 70, 6);
-  }
-
-  function drawRacket(pen) {
-    pen.oval(500, 480, 170, 220, 2);
-    for (let i = -3; i <= 3; i += 1) {
-      pen.stroke([[500 + i * 28, 300], [500 + i * 22, 660]], 1);
-    }
-    pen.stroke([[500, 700], [510, 980], [470, 990], [490, 700]], 2);
-    pen.oval(780, 860, 70, 70, 1.6);
-  }
-
-  function drawPlant(pen) {
-    pen.stroke([[500, 980], [510, 640]], 2);
-    pen.curve([510, 700], [360, 620], [280, 500], [340, 420], 1.7);
-    pen.curve([510, 680], [620, 560], [740, 430], [680, 360], 1.7);
-    pen.curve([510, 720], [430, 540], [390, 360], [460, 300], 1.6);
-    pen.stroke([[430, 980], [590, 975], [560, 1080], [450, 1085], [430, 980]], 1.6);
-  }
-
-  function drawStreet(pen) {
-    pen.stroke([[180, 980], [420, 520], [600, 520], [860, 990]], 1.8);
-    pen.stroke([[300, 400], [300, 700], [420, 700]], 1.6);
-    pen.stroke([[640, 360], [640, 680], [780, 860]], 1.6);
-    pen.curve([200, 280], [400, 240], [620, 250], [860, 300], 1.2);
-    pen.hatch(650, 720, 80, 90, 5);
-  }
 })();

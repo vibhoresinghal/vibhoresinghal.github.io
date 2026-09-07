@@ -20,9 +20,10 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23151916'/%3E%3Cpath d='M23 27h16l11 30 11-30h16L57 76H43L23 27Z' fill='%23ece9e1'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Momo+Trust+Display&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="notebook.css">
+  <link rel="stylesheet" href="notebook.css?v=curved-a5-1">
+  <link rel="stylesheet" href="notebook-reference.css?v=index-style-1">
 </head>
 <body class="notebook-page">
   <a class="skip-link" href="#notebook-stage">Skip to notebook</a>
@@ -32,45 +33,47 @@
   </button>
   <div class="theme-veil" aria-hidden="true"></div>
 
+  <div class="dot-grid" aria-hidden="true"><div class="dot-grid-paper"></div></div>
   <main class="notebook-shell">
     <header class="notebook-header">
-      <a class="notebook-back" href="index.html" aria-label="Back to the index"><span aria-hidden="true">&#8592;</span> Back to index</a>
+      <nav class="notebook-index" aria-label="Page index">
+        <a href="index.html"><span class="notebook-index-number">01</span><svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.2 8 2.5l5.5 4.7V13a.8.8 0 0 1-.8.8H9.2V10H6.8v3.8H3.3A.8.8 0 0 1 2.5 13Z"/></svg>Intro</a>
+        <a href="digital-creations.html"><span class="notebook-index-number">02</span><svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.2" y="2.2" width="4.6" height="4.6" rx=".8"/><rect x="9.2" y="3.2" width="4.6" height="4.6" rx=".8"/><rect x="4.2" y="9.2" width="4.6" height="4.6" rx=".8"/></svg>Digital creations</a>
+        <a href="notebook.html" aria-current="page"><span class="notebook-index-number">03</span><svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.6 3.2h4.8c.9 0 1.6.5 1.6 1.5v8c0-.7-.7-1.1-1.6-1.1H2.6Z"/><path d="M13.4 3.2H8.6c-.9 0-1.6.5-1.6 1.5v8c0-.7.7-1.1 1.6-1.1h4.8Z"/></svg>My notebook</a>
+      </nav>
       <span class="notebook-owner">Vibhore Singhal</span>
     </header>
 
-    <section class="notebook-hero" id="notebook-stage" aria-label="A sketchbook. Click a page or use the arrows to turn.">
+    <section class="notebook-hero" id="notebook-stage" aria-label="A sketchbook. Turn a page or use the arrows to turn.">
       <div class="notebook-intro">
         <p class="notebook-kicker">Away from the screen</p>
-        <h1 class="notebook-name">The <em>notebook.</em></h1>
-        <p class="notebook-description">Things I notice. Things I come back to.</p>
+        <h1 class="notebook-name">My notebook.</h1>
+        <p class="notebook-description">Familiar faces. A little colour. Pencil on paper.</p>
       </div>
 
-      <div class="sb-wrap">
-        <div class="sb-stage">
-          <div class="sb-book" id="book" role="group" aria-roledescription="carousel" aria-label="Notebook spreads" style="aspect-ratio:864 / 720">
-            <div class="sb-full" id="book-full"></div>
-            <div id="book-flip" style="display:contents"></div>
-            <button type="button" class="sb-zone sb-prev" id="notebook-zone-prev" tabindex="-1" aria-hidden="true"></button>
-            <button type="button" class="sb-zone sb-next" id="notebook-zone-next" tabindex="-1" aria-hidden="true"></button>
+      <div class="sb-wrap" id="sbWrap" data-cover="front">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <filter id="sb-mblur-1"><feGaussianBlur stdDeviation="5 0"/></filter>
+        <filter id="sb-mblur-2"><feGaussianBlur stdDeviation="14 0"/></filter>
+      </svg>
+      <div class="sb-stage" id="sbStage">
+        <div class="sb-3d" id="sb3d">
+          <div class="sb-tilt" id="sbTilt">
+            <div class="sb-cast ambient" aria-hidden="true"></div>
+            <div class="sb-cast contact" aria-hidden="true"></div>
+            <div class="sb-cast hair" aria-hidden="true"></div>
+            <div class="sb-book" id="sbBook" role="group" aria-roledescription="carousel" aria-label="Notebook sketches"><div class="sb-full"><img src="images/notebook/spreads/front-cover.svg?v=covers-1" width="1760" height="1240" alt="Deep olive cloth notebook cover with gold lettering" draggable="false"></div></div>
           </div>
-
         </div>
-
-        <div class="notebook-navigation">
-          <button type="button" class="sb-arrow" id="notebook-prev" aria-label="Previous spread"><span aria-hidden="true">&#8592;</span></button>
-          <div class="notebook-page-meta" aria-live="polite" aria-atomic="true">
-            <p class="notebook-count" id="notebook-count">01 <span>/ 04</span></p>
-            <div class="sb-captions" id="notebook-captions"></div>
-          </div>
-          <button type="button" class="sb-arrow" id="notebook-next" aria-label="Next spread"><span aria-hidden="true">&#8594;</span></button>
-        </div>
-        <nav class="notebook-pagination" id="notebook-pagination" aria-label="Choose a spread"></nav>
       </div>
+      <div class="notebook-navigation"><button type="button" class="sb-arrow" id="sbLeft" aria-label="Previous sketch">&#8592;</button><div class="notebook-page-meta" aria-live="polite"><p class="notebook-count" id="notebook-count">VOL. 01</p><div class="sb-captions" id="sbCaptions"></div></div><button type="button" class="sb-arrow" id="sbRight" aria-label="Next sketch">&#8594;</button></div><nav class="notebook-pagination" id="plateList" aria-label="Choose a sketch"></nav>
+      <p class="sb-hint" id="sbHint">Drag a page to turn</p>
+    </div>
     </section>
     <footer class="notebook-footer">
-      <span>A small collection of everyday things</span>
+      <span>Six studies in pencil &amp; watercolour</span>
       <span class="notebook-instruction">Click a page or use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd></span>
-      <span class="notebook-touch-instruction">Swipe to turn a page</span>
+      <span class="notebook-touch-instruction">Tap or drag to turn a page</span>
     </footer>
   </main>
 
@@ -80,6 +83,6 @@
 
   <script src="gate.js"></script>
   <script src="theme.js"></script>
-  <script src="notebook.js"></script>
+  <script src="notebook.js?v=covers-1"></script>
 </body>
 </html>
