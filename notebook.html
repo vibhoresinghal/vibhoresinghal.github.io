@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#e6e9ed">
+  <meta name="theme-color" content="#ece9e1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="A flip-through notebook of sketches and notes by Vibhore Singhal.">
   <script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23151916'/%3E%3Cpath d='M23 27h16l11 30 11-30h16L57 76H43L23 27Z' fill='%23ece9e1'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Momo+Trust+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="notebook.css">
 </head>
@@ -34,43 +34,44 @@
 
   <main class="notebook-shell">
     <header class="notebook-header">
-      <a class="notebook-back" href="index.html" aria-label="Back to the index">← Index</a>
+      <a class="notebook-back" href="index.html" aria-label="Back to the index"><span aria-hidden="true">&#8592;</span> Back to index</a>
+      <span class="notebook-owner">Vibhore Singhal</span>
     </header>
 
     <section class="notebook-hero" id="notebook-stage" aria-label="A sketchbook. Click a page or use the arrows to turn.">
-      <p class="notebook-kicker">Designer / filmmaker / notes from the desk</p>
-      <h1 class="notebook-name">Vibhore Singhal</h1>
+      <div class="notebook-intro">
+        <p class="notebook-kicker">Away from the screen</p>
+        <h1 class="notebook-name">The <em>notebook.</em></h1>
+        <p class="notebook-description">Things I notice. Things I come back to.</p>
+      </div>
 
       <div class="sb-wrap">
-        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-          <filter id="sb-mblur-1"><feGaussianBlur stdDeviation="5 0"></feGaussianBlur></filter>
-          <filter id="sb-mblur-2"><feGaussianBlur stdDeviation="14 0"></feGaussianBlur></filter>
-        </svg>
-
         <div class="sb-stage">
-          <button type="button" class="sb-arrow left" id="notebook-prev" aria-label="Previous page">
-            <svg viewBox="0 0 14 44" width="14" height="44" fill="none" aria-hidden="true">
-              <polyline points="11,3 3,22 11,41" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></polyline>
-            </svg>
-          </button>
-
-          <div class="sb-book" id="book" style="aspect-ratio:1280 / 720">
+          <div class="sb-book" id="book" role="group" aria-roledescription="carousel" aria-label="Notebook spreads" style="aspect-ratio:864 / 720">
             <div class="sb-full" id="book-full"></div>
             <div id="book-flip" style="display:contents"></div>
             <button type="button" class="sb-zone sb-prev" id="notebook-zone-prev" tabindex="-1" aria-hidden="true"></button>
             <button type="button" class="sb-zone sb-next" id="notebook-zone-next" tabindex="-1" aria-hidden="true"></button>
           </div>
 
-          <button type="button" class="sb-arrow right" id="notebook-next" aria-label="Next page">
-            <svg viewBox="0 0 14 44" width="14" height="44" fill="none" aria-hidden="true">
-              <polyline points="3,3 11,22 3,41" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></polyline>
-            </svg>
-          </button>
         </div>
 
-        <div class="sb-captions" id="notebook-captions"></div>
+        <div class="notebook-navigation">
+          <button type="button" class="sb-arrow" id="notebook-prev" aria-label="Previous spread"><span aria-hidden="true">&#8592;</span></button>
+          <div class="notebook-page-meta" aria-live="polite" aria-atomic="true">
+            <p class="notebook-count" id="notebook-count">01 <span>/ 04</span></p>
+            <div class="sb-captions" id="notebook-captions"></div>
+          </div>
+          <button type="button" class="sb-arrow" id="notebook-next" aria-label="Next spread"><span aria-hidden="true">&#8594;</span></button>
+        </div>
+        <nav class="notebook-pagination" id="notebook-pagination" aria-label="Choose a spread"></nav>
       </div>
     </section>
+    <footer class="notebook-footer">
+      <span>A small collection of everyday things</span>
+      <span class="notebook-instruction">Click a page or use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd></span>
+      <span class="notebook-touch-instruction">Swipe to turn a page</span>
+    </footer>
   </main>
 
   <noscript>

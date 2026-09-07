@@ -11,6 +11,8 @@
   const fullEl = document.querySelector("#book-full");
   const flipEl = document.querySelector("#book-flip");
   const captionsEl = document.querySelector("#notebook-captions");
+  const countEl = document.querySelector("#notebook-count");
+  const paginationEl = document.querySelector("#notebook-pagination");
   const prevButtons = [document.querySelector("#notebook-prev"), document.querySelector("#notebook-zone-prev")];
   const nextButtons = [document.querySelector("#notebook-next"), document.querySelector("#notebook-zone-next")];
 
@@ -20,7 +22,7 @@
   const simple = reduceMotion || window.matchMedia("(max-width: 640px), (pointer: coarse)").matches;
   const pages = SPREADS.map((spread, index) => ({
     ...spread,
-    w: 1280,
+    w: 864,
     h: 720,
     href: spread.src || drawSpread(spread, index)
   }));
@@ -28,11 +30,32 @@
   let index = 0;
   let flip = null;
   let flipId = 0;
+  let flipTimer;
+  let suppressClickUntil = 0;
+  const pageButtons = pages.map((page, pageIndex) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.setAttribute("aria-label", `Spread ${pageIndex + 1}: ${page.title}`);
+    button.addEventListener("click", () => {
+      if (flip || pageIndex === index) return;
+      go(pageIndex > index ? "next" : "prev", pageIndex);
+    });
+    paginationEl?.append(button);
+    return button;
+  });
 
-  const go = (dir) => {
+  const finishFlip = () => {
+    if (!flip) return;
+    window.clearTimeout(flipTimer);
+    index = flip.to;
+    flip = null;
+    paint();
+  };
+
+  const go = (dir, destination) => {
     if (flip) return;
     const from = index;
-    const to = dir === "next" ? (from + 1) % pages.length : (from - 1 + pages.length) % pages.length;
+    const to = destination ?? (dir === "next" ? (from + 1) % pages.length : (from - 1 + pages.length) % pages.length);
     if (simple) {
       index = to;
       paint();
@@ -41,10 +64,15 @@
     flipId += 1;
     flip = { id: flipId, dir, from, to };
     paint();
+    flipTimer = window.setTimeout(finishFlip, 900);
   };
 
   const paint = () => {
     const current = pages[flip ? flip.to : index];
+    const currentIndex = flip ? flip.to : index;
+    book.setAttribute("aria-label", `Spread ${currentIndex + 1} of ${pages.length}: ${current.title}`);
+    countEl.innerHTML = `${String(currentIndex + 1).padStart(2, "0")} <span>/ ${String(pages.length).padStart(2, "0")}</span>`;
+    pageButtons.forEach((button, pageIndex) => button.setAttribute("aria-current", String(pageIndex === currentIndex)));
     if (!flip || simple) {
       fullEl.className = "sb-full";
       fullEl.innerHTML = "";
@@ -63,7 +91,7 @@
       );
     }
 
-    const outgoing = flip ? `<p class="sb-caption cap-out">${pages[flip.from].title}</p>` : "";
+    const outgoing = flip ? `<p class="sb-caption cap-out" aria-hidden="true">${pages[flip.from].title}</p>` : "";
     captionsEl.innerHTML = `${outgoing}<p class="sb-caption">${current.title}</p>`;
   };
 
@@ -72,7 +100,7 @@
     node.src = src;
     node.alt = alt;
     node.draggable = false;
-    node.width = 1280;
+    node.width = 864;
     node.height = 720;
     if (side) node.className = `sb-half-img ${side}`;
     return node;
@@ -97,19 +125,36 @@
     node.append(front, back);
     node.addEventListener("animationend", (event) => {
       if (event.target !== node || !flip || flip.id !== flipId) return;
-      index = flip.to;
-      flip = null;
-      paint();
+      finishFlip();
     });
     return node;
   };
 
-  prevButtons.forEach((button) => button?.addEventListener("click", () => go("prev")));
-  nextButtons.forEach((button) => button?.addEventListener("click", () => go("next")));
+  prevButtons.forEach((button) => button?.addEventListener("click", () => {
+    if (Date.now() >= suppressClickUntil) go("prev");
+  }));
+  nextButtons.forEach((button) => button?.addEventListener("click", () => {
+    if (Date.now() >= suppressClickUntil) go("next");
+  }));
+  let touchStart = null;
+  book.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" || !event.isPrimary) return;
+    touchStart = { x: event.clientX, y: event.clientY };
+  });
+  book.addEventListener("pointerup", (event) => {
+    if (!touchStart) return;
+    const dx = event.clientX - touchStart.x;
+    const dy = event.clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+    suppressClickUntil = Date.now() + 400;
+    go(dx < 0 ? "next" : "prev");
+  });
+  book.addEventListener("pointercancel", () => { touchStart = null; });
   window.addEventListener("keydown", (event) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
     const tag = event.target?.tagName;
-    if (tag === "INPUT" || tag === "TEXTAREA" || event.target?.isContentEditable) return;
+    if (document.documentElement.classList.contains("is-gated") || tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target?.isContentEditable) return;
     event.preventDefault();
     go(event.key === "ArrowRight" ? "next" : "prev");
   });
@@ -145,8 +190,8 @@
       ctx.fillRect(book.x + book.w - 1 - i, book.y + 8, 5, book.h - 6);
     }
 
-    const left = paperPage(spread.left, spread.title.split(" / ")[0], seed);
-    const right = paperPage(spread.right, spread.title.split(" / ")[1] || "", seed + 11);
+    const left = paperPage(spread.left, spread.title.split(" / ")[0], seed, seed * 2 + 1);
+    const right = paperPage(spread.right, spread.title.split(" / ")[1] || "", seed + 11, seed * 2 + 2);
     const pageY = book.y + 6;
     const pageH = book.h - 14;
     const pageW = book.w / 2;
@@ -179,10 +224,14 @@
     ctx.lineTo(spine + 0.5, pageY + pageH - 8);
     ctx.stroke();
 
-    return canvas.toDataURL("image/png");
+    const cropped = document.createElement("canvas");
+    cropped.width = 864;
+    cropped.height = 720;
+    cropped.getContext("2d").drawImage(canvas, 208, 0, 864, 720, 0, 0, 864, 720);
+    return cropped.toDataURL("image/png");
   }
 
-  function paperPage(doodle, title, seed) {
+  function paperPage(doodle, title, seed, folio) {
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
     canvas.height = 1408;
@@ -200,6 +249,18 @@
       data[i + 2] = Math.min(255, data[i + 2] + n);
     }
     ctx.putImageData(image, 0, 0);
+    ctx.fillStyle = "#8b7a67";
+    ctx.font = "22px monospace";
+    ctx.fillText("OBSERVATIONS", 140, 130);
+    ctx.textAlign = "right";
+    ctx.fillText(String(folio).padStart(2, "0"), 884, 130);
+    ctx.textAlign = "left";
+    ctx.strokeStyle = "rgba(95, 78, 56, 0.2)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(140, 160);
+    ctx.lineTo(884, 160);
+    ctx.stroke();
     const pen = makePen(ctx, seed * 17 + title.length);
     ({
       camera: drawCamera,
@@ -303,7 +364,7 @@
       ctx.translate(140, 1280);
       ctx.rotate(-0.04 + jitter(0.02));
       ctx.fillStyle = "rgba(42, 38, 32, 0.62)";
-      ctx.font = "italic 34px 'Momo Trust Display', Georgia, serif";
+      ctx.font = "italic 38px Georgia, serif";
       ctx.fillText(text.toLowerCase(), 0, 0);
       ctx.restore();
     };
