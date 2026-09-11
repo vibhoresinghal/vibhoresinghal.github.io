@@ -799,6 +799,7 @@ a.entry-title {
 .entry-panel {
   display: grid;
   grid-template-rows: 0fr;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -806,7 +807,7 @@ a.entry-title {
 .job-detail {
   overflow: hidden;
   min-height: 0;
-  padding: 0 0 10px calc(var(--entry-label) + var(--entry-gap));
+  padding: 0 0 0 calc(var(--entry-label) + var(--entry-gap));
   opacity: 0;
 }
 
@@ -1100,24 +1101,20 @@ a.entry-title {
 }
 
 .entry.is-hot .entry-panel,
-.entry:focus-visible .entry-panel,
-.entry:has(:focus-visible) .entry-panel,
 .entry.is-open .entry-panel,
 .job.is-hot .entry-panel,
-.job:has(:focus-visible) .entry-panel,
 .job.is-open .entry-panel {
   grid-template-rows: 1fr;
+  pointer-events: auto;
 }
 
-@media (hover: hover) {
-  .entry:focus-visible .entry-body,
-  .entry:has(:focus-visible) .entry-body,
-  .entry.is-open .entry-body,
-  .job:has(:focus-visible) .entry-body,
-  .job.is-open .entry-body {
-    opacity: 1;
-    filter: none;
-  }
+.entry.is-hot .entry-body,
+.entry.is-open .entry-body,
+.job.is-hot .entry-body,
+.job.is-open .entry-body {
+  padding-bottom: 10px;
+  opacity: 1;
+  filter: none;
 }
 
 @keyframes chevron-nudge {

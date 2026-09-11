@@ -29,6 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Momo+Trust+Display&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="work.css?v=6">
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23151916'/%3E%3Cpath d='M23 27h16l11 30 11-30h16L57 76H43L23 27Z' fill='%23ece9e1'/%3E%3C/svg%3E">
@@ -80,7 +81,7 @@
           <a href="#experience">
             <span>04</span>
             <svg class="index-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.2" y="2.6" width="9.6" height="10.8" rx="1.2"/><path d="M6 5.2h4M6 8h4M6 10.8h2.4"/></svg>
-            Places
+            Work
           </a>
         </li>
         <li>
@@ -151,10 +152,14 @@
         <a class="button" href="mailto:vibhoresinghal60@gmail.com">Let’s chat</a>
       </section>
 
-      <section class="section work-history" id="experience">
-        <h2>Along the way</h2>
+      <section class="section work-history selected-work" id="experience" aria-labelledby="work-heading">
+        <span id="work" class="work-anchor" aria-hidden="true"></span>
+        <div class="work-heading">
+          <h2 id="work-heading">Work, along the way</h2>
+        </div>
+        <p class="work-introduction">The teams I've been part of, the things I've helped shape, and a closer look at the details in between.</p>
         <div class="job-list">
-          <article class="job">
+          <article class="job work-employer" data-work-employer="neo">
             <div class="job-row">
               <div class="job-position">
                 <a class="brand" href="https://neo.work/" target="_blank" rel="noopener noreferrer">
@@ -168,9 +173,31 @@
             <div class="entry-panel"><div class="entry-body job-detail">
               <p>Mar 2026 – Present · Bangalore · On-site</p>
               <p>Part of the founding design team building Neo, a next-generation AI work platform.</p>
+              <div class="neo-project-story">
+                <p>I'm exploring how a <button class="work-cue" type="button" data-work-preview="workspace" aria-controls="neo-work-media" aria-pressed="false">shared workspace</button> can bring projects, conversations, and context into one calm place. The interesting part is making a powerful web tool feel approachable, with a clear starting point and room to focus.</p>
+                <p>With <button class="work-cue" type="button" data-work-preview="workflows" aria-controls="neo-work-media" aria-pressed="false">assisted workflows</button>, the aim is to make the next step easier without taking control away. A little structure, useful suggestions, and a clear handoff from an idea to something ready for review.</p>
+              </div>
             </div></div>
+            <figure class="work-preview work-preview-laptop" id="neo-work-media" data-work-owner="neo" data-initial-preview="workspace" aria-label="Web-tool interaction preview">
+              <div class="work-laptop">
+                <div class="work-laptop-lid">
+                  <span class="work-laptop-camera" aria-hidden="true"></span>
+                  <div class="work-screen">
+                    <img class="work-poster" src="media/work/workspace.png" alt="Illustrative web workspace with projects and a contextual assistant" width="1280" height="800" loading="lazy" decoding="async">
+                    <video muted loop playsinline preload="none" aria-label="Illustrative web-tool interaction recording"></video>
+                  </div>
+                  <div class="work-laptop-chin" aria-hidden="true"></div>
+                </div>
+                <div class="work-laptop-base" aria-hidden="true"><span></span></div>
+              </div>
+              <figcaption aria-live="polite">
+                <span class="work-preview-title">A calmer place to work</span>
+                <span class="work-preview-meta">Illustrative concept / hover to preview</span>
+              </figcaption>
+              <button class="work-play" type="button" aria-label="Play A calmer place to work preview">Play preview</button>
+            </figure>
           </article>
-          <article class="job">
+          <article class="job work-employer" data-work-employer="zeta">
             <div class="job-row">
               <div class="job-position">
                 <a class="brand" href="https://www.zeta.tech/in/" target="_blank" rel="noopener noreferrer">
@@ -183,21 +210,41 @@
             </div>
             <div class="entry-panel"><div class="entry-body job-detail">
               <p>Jul 2021 – Present · Bangalore · On-site</p>
-              <ol class="job-roles">
+              <ol class="job-roles work-role-stories">
                 <li>
                   <strong>Senior UX Designer</strong>
-                  <span>Jan 2025 – Present</span>
+                  <span>Jan 2025 &ndash; Present</span>
+                  <p class="work-role-copy">I focused on making everyday money movement feel simpler. For the <button class="work-cue" type="button" data-work-preview="payments" aria-controls="work-media" aria-pressed="false">payment experience</button>, that meant bringing the recipient, amount, and next step into a clear flow, then shaping the small moments of feedback that help someone feel confident their money is on its way.</p>
+                  <p class="work-role-copy">I also explored <button type="button" class="work-cue" data-work-preview="card-controls" aria-controls="work-media" aria-pressed="false">card controls</button>, making it easier to manage limits, pause a card, and understand what is enabled.</p>
+                  <p class="work-role-copy">With <button type="button" class="work-cue" data-work-preview="transaction-details" aria-controls="work-media" aria-pressed="false">transaction details</button>, I looked at making every payment easier to trace, with clear statuses and useful next steps.</p>
                 </li>
                 <li>
                   <strong>UX Designer II</strong>
-                  <span>Jan 2023 – Dec 2024</span>
+                  <span>Jan 2023 &ndash; Dec 2024</span>
+                  <p class="work-role-copy">My work centred on helping people make sense of their finances. With <button class="work-cue" type="button" data-work-preview="spending" aria-controls="work-media" aria-pressed="false">spending insights</button>, I explored how to turn a busy set of transactions into a useful picture of the month, balancing information hierarchy with thoughtful details in the charts and transitions.</p>
                 </li>
                 <li>
                   <strong>UX Designer</strong>
-                  <span>Jul 2021 – Dec 2022</span>
+                  <span>Jul 2021 &ndash; Dec 2022</span>
+                  <p class="work-role-copy">I worked on the building blocks of everyday banking, learning to carry a journey from early flows to the final interaction. The <button class="work-cue" type="button" data-work-preview="savings" aria-controls="work-media" aria-pressed="false">savings goals</button> exploration connects those foundations to something personal: helping a small contribution feel like a step towards a real plan.</p>
                 </li>
               </ol>
             </div></div>
+        <figure class="work-preview" id="work-media" data-work-owner="zeta" aria-label="Product interaction preview">
+          <div class="work-phone">
+            <div class="work-screen">
+              <img class="work-poster" src="media/work/payments.png" alt="Illustrative payment app showing a transfer to Nora" width="780" height="1688" loading="lazy" decoding="async">
+              <video muted loop playsinline preload="none" aria-label="Illustrative product interaction recording"></video>
+              <span class="work-island" aria-hidden="true"></span>
+              <span class="work-home" aria-hidden="true"></span>
+            </div>
+          </div>
+          <figcaption aria-live="polite">
+            <span class="work-preview-title">A simpler way to pay</span>
+            <span class="work-preview-meta">Illustrative concept / hover to preview</span>
+          </figcaption>
+          <button class="work-play" type="button" aria-label="Play A simpler way to pay preview">Play preview</button>
+        </figure>
           </article>
           <article class="job">
             <div class="job-row">
@@ -595,257 +642,73 @@
 
     if (hasFlip) gsap.registerPlugin(Flip);
 
-    const bodyOf = (item) => item?.querySelector(".entry-body, .job-detail");
-
-    const fadeBody = (body, show) => {
-      if (!body || typeof gsap === "undefined" || reduceMotion) {
-        if (body) body.style.opacity = show ? "1" : "0";
-        return;
-      }
-
-      const media = body.querySelectorAll(".entry-gallery > *");
-      gsap.killTweensOf([body, media]);
-
-      if (!show) {
-        gsap.to(body, {
-          opacity: 0,
-          filter: "blur(8px)",
-          y: 4,
-          duration: 0.22,
-          ease: "power2.in",
-          overwrite: true
-        });
-        if (media.length) {
-          gsap.to(media, {
-            opacity: 0,
-            filter: "blur(8px)",
-            duration: 0.18,
-            ease: "power2.in",
-            overwrite: true
-          });
-        }
-        return;
-      }
-
-      gsap.fromTo(body, {
-        opacity: 0,
-        filter: "blur(10px)",
-        y: 8
-      }, {
-        opacity: 1,
-        filter: "blur(0px)",
-        y: 0,
-        duration: 0.48,
-        delay: 0.08,
-        ease: "power2.out",
-        overwrite: true
-      });
-
-      if (media.length) {
-        gsap.fromTo(media, {
-          opacity: 0,
-          filter: "blur(12px)",
-          scale: 0.96
-        }, {
-          opacity: 1,
-          filter: "blur(0px)",
-          scale: 1,
-          duration: 0.5,
-          delay: 0.12,
-          stagger: 0.06,
-          ease: "power2.out",
-          overwrite: true
-        });
-      }
-    };
-
-    const layout = (list, mutate, done) => {
-      const items = [...list.querySelectorAll(":scope > .entry, :scope > .job")];
-      const finish = () => done?.();
-
-      if (reduceMotion || typeof gsap === "undefined") {
-        mutate();
-        finish();
-        return;
-      }
-
-      gsap.killTweensOf(items);
-
-      if (hasFlip) {
-        const state = Flip.getState(items);
-        mutate();
-        Flip.from(state, {
-          duration: 0.72,
-          ease: "power3.out",
-          nested: true,
-          prune: true,
-          absoluteOnLeave: false,
-          onComplete: finish,
-          onInterrupt: finish
-        });
-        return;
-      }
-
-      const first = items.map((item) => item.getBoundingClientRect().top);
-      mutate();
-      items.forEach((item, index) => {
-        const dy = first[index] - item.getBoundingClientRect().top;
-        if (Math.abs(dy) < 0.5) return;
-        gsap.fromTo(item, { y: dy }, { y: 0, duration: 0.72, ease: "power3.out", overwrite: true });
-      });
-      window.setTimeout(finish, 720);
-    };
-
     const resets = [];
-
-    document.querySelectorAll(".entry-list, .job-list").forEach((list) => {
+    // Entries open deliberately; project previews inside them still respond to hover.
+    document.querySelectorAll(".entry-list, .job-list").forEach((list, listIndex) => {
       const items = [...list.querySelectorAll(":scope > .entry, :scope > .job")];
-      const dwell = 260;
+      const records = new Map();
       let current = null;
-      let pending = null;
-      let leaveTimer = 0;
-      let enterTimer = 0;
-      let flipping = false;
-      let pointer = { x: 0, y: 0 };
 
-      const itemFromPoint = () => {
-        const el = document.elementFromPoint(pointer.x, pointer.y);
-        const item = el?.closest(".entry, .job");
-        return item && list.contains(item) ? item : null;
-      };
+      items.forEach((item, itemIndex) => {
+        const head = item.querySelector('.entry-head, .job-row');
+        const panel = item.querySelector('.entry-panel');
+        if (!head || !panel) return;
+        const preview = item.querySelector('.work-preview');
+        const name = head.querySelector('.entry-name, .entry-title, .brand')?.textContent.trim() || 'this entry';
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'entry-toggle';
+        toggle.setAttribute('aria-label', 'Toggle ' + name + ' details');
+        toggle.setAttribute('aria-expanded', 'false');
+        panel.id ||= 'entry-details-' + listIndex + '-' + itemIndex;
+        toggle.setAttribute('aria-controls', panel.id);
+        toggle.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>';
+        head.append(toggle);
+        head.classList.add('has-entry-toggle');
+        panel.inert = true;
+        records.set(item, { head, panel, toggle, preview });
 
-      const schedule = (item) => {
-        window.clearTimeout(enterTimer);
-        window.clearTimeout(leaveTimer);
-        pending = item && item !== current ? item : null;
-        if (!pending) return;
-        enterTimer = window.setTimeout(() => {
-          const over = itemFromPoint();
-          pending = null;
-          if (over !== item) return;
-          activate(item);
-        }, dwell);
-      };
-
-      const activate = (item, forced = false) => {
-        window.clearTimeout(leaveTimer);
-        window.clearTimeout(enterTimer);
-        pending = null;
-        if (current === item || flipping) return;
-        if (!forced && itemFromPoint() !== item) return;
-        fadeBody(bodyOf(current), false);
-        flipping = true;
-        layout(list, () => {
-          current?.classList.remove("is-hot");
-          item.classList.add("is-hot");
-          current = item;
-        }, () => {
-          flipping = false;
-          if (forced) return;
-          const still = itemFromPoint();
-          if (still === current) return;
-          if (still) schedule(still);
-          else clear();
+        head.addEventListener('click', event => {
+          if (event.target.closest('a[href]')) return;
+          event.preventDefault();
+          if (current === item) close(); else activate(item);
         });
-        fadeBody(bodyOf(item), true);
-      };
+      });
 
-      const clear = () => {
-        window.clearTimeout(enterTimer);
-        pending = null;
-        if (!current || flipping) return;
-        fadeBody(bodyOf(current), false);
-        flipping = true;
-        layout(list, () => {
-          current.classList.remove("is-hot");
-          current = null;
-        }, () => {
-          flipping = false;
-          const still = itemFromPoint();
-          if (still) schedule(still);
-        });
-      };
-
-      const reset = () => {
-        window.clearTimeout(leaveTimer);
-        window.clearTimeout(enterTimer);
-        flipping = false;
-        pending = null;
-        if (document.activeElement instanceof HTMLElement) {
-          const focused = document.activeElement.closest(".entry, .job");
-          if (focused && list.contains(focused)) document.activeElement.blur();
+      function setOpen(item, open) {
+        const record = records.get(item);
+        if (!record) return;
+        if (!open && (record.panel.contains(document.activeElement) || record.preview?.contains(document.activeElement))) {
+          record.toggle.focus({ preventScroll: true });
         }
-        if (!current) return;
-        fadeBody(bodyOf(current), false);
-        current.classList.remove("is-hot");
-        current = null;
-      };
-
-      resets.push(reset);
-
-      if (canHover) {
-        list.addEventListener("pointermove", (event) => {
-          pointer.x = event.clientX;
-          pointer.y = event.clientY;
-          const over = itemFromPoint();
-          if (pending && over !== pending) schedule(over);
-        });
-        items.forEach((item) => {
-          item.addEventListener("pointerenter", () => {
-            window.clearTimeout(leaveTimer);
-            if (current === item) return;
-            schedule(item);
-          });
-          item.addEventListener("pointerleave", (event) => {
-            if (event.relatedTarget instanceof Node && item.contains(event.relatedTarget)) return;
-            window.clearTimeout(enterTimer);
-            if (pending === item) pending = null;
-            if (current !== item) return;
-            leaveTimer = window.setTimeout(() => {
-              if (itemFromPoint()) return;
-              clear();
-            }, 140);
-          });
-          item.addEventListener("click", (event) => {
-            if (event.target.closest(".gallery-shot")) return;
-            if (!event.target.closest("a[href]")) return;
-            reset();
-          });
-        });
-        list.addEventListener("pointerleave", () => {
-          window.clearTimeout(enterTimer);
-          pending = null;
-          if (flipping) return;
-          leaveTimer = window.setTimeout(() => {
-            if (itemFromPoint()) return;
-            clear();
-          }, 140);
-        });
-      } else {
-        items.forEach((item) => {
-          item.addEventListener("click", (event) => {
-            if (event.target.closest("a[href], .gallery-shot")) return;
-            event.preventDefault();
-            if (item.classList.contains("is-hot")) {
-              clear();
-              return;
-            }
-            activate(item, true);
-          });
-          item.addEventListener("selectstart", (event) => {
-            if (!event.target.closest(".entry-body, .job-detail")) event.preventDefault();
-          });
-        });
+        record.panel.inert = !open;
+        record.toggle.setAttribute('aria-expanded', String(open));
+        item.classList.toggle('is-hot', open);
+        item.classList.remove('is-open');
       }
+      function activate(item) {
+        if (!records.has(item) || current === item) return;
+        if (current) setOpen(current, false);
+        current = item;
+        setOpen(item, true);
+        document.dispatchEvent(new CustomEvent('entry:activate', { detail: { item } }));
+      }
+      function close() {
+        if (!current) return;
+        const previous = current;
+        current = null;
+        setOpen(previous, false);
+      }
+      resets.push(close);
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !event.target.closest('input, textarea, [contenteditable="true"]')) resets.forEach(reset => reset());
     });
 
     const resetLists = () => resets.forEach((reset) => reset());
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) resetLists();
-    });
     window.addEventListener("pagehide", resetLists);
     window.addEventListener("pageshow", resetLists);
-    window.addEventListener("blur", resetLists);
 
     const viewer = document.querySelector(".photo-viewer");
     const viewerImage = viewer?.querySelector(".photo-viewer-stage img");
@@ -1136,5 +999,6 @@
   <script src="theme.js"></script>
   <script src="gate.js"></script>
   <script src="dot-grid.js"></script>
+  <script src="work.js?v=6"></script>
 </body>
 </html>
