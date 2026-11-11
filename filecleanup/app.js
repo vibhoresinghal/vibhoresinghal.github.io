@@ -44,10 +44,12 @@ function validFigmaLink(value) {
 function updatePrompt() {
   const links = input.value.split(/\n/).map(s => s.trim()).filter(Boolean);
   const invalid = links.filter(link => !validFigmaLink(link));
+  $('copy-prompt').disabled = links.length === 0 || invalid.length > 0;
   $('link-error').hidden = !invalid.length;
   $('link-error').textContent = invalid.length ? 'Use a Figma Design link (https://www.figma.com/design/…), one per line.' : '';
   input.setAttribute('aria-invalid', String(Boolean(invalid.length)));
   const scope = document.querySelector('input[name="scope"]:checked').value;
+  $('scope-help').textContent = {full: 'Organize pages, sections, and existing screens.', sidebar: 'Rename and reorder pages. Leave canvases untouched.', audit: 'Get a proposed cleanup plan before any edits.'}[scope];
   const target = links.length > 1 ? `these files:\n${links.map(link => '- ' + link).join('\n')}` : `this file: ${links[0] || '[paste your Figma file link]'}`;
   const scopes = {
     full: 'Clean up the sidebar and canvases for handover using the six emoji categories. Consolidate related pages and arrange the existing designs. Ask me about any design statuses you cannot establish.',
